@@ -7,12 +7,12 @@
 
 // Functions
 //
-void DBACT_ToggleFPLed();
-void DBACT_ToggleSFRedLed();
-void DBACT_ToggleSFGreenLed();
-void DBACT_WriteSPI();
-void DBACT_StopSPI();
-void DBACT_ToggleSF_EN();
-void DBACT_SelfTestMeasure();
+void DBACT_ToggleDigitalOutput();
+void DBACT_ToggleSFOutput();
+void DBACT_GetStateLimitSwitchDUT();
+void DBACT_GetStateLimitSwitchAdapter();
+void DBACT_MeasureIDDividerTop();
+void DBACT_MeasureIDDividerBot();
+void DBACT_MeasurePressure();
 
 #endif //__DEBUGACTIONS_H

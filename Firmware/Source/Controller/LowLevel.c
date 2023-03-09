@@ -14,82 +14,94 @@ void LL_ToggleBoardLED()
 }
 //-----------------------------
 
-void LL_SetStateFPLed(bool State)
+void LL_SetStateDigitalOutput(bool State)
 {
-	GPIO_SetState(GPIO_FP_LED, State);
+	if (DataTable[REG_DBG] == 1)
+		GPIO_SetState(GPIO_IND_1, State);
+	else if (DataTable[REG_DBG] == 2)
+		GPIO_SetState(GPIO_IND_2, State);
+	else if (DataTable[REG_DBG] == 3)
+		GPIO_SetState(GPIO_PNEUM_1, State);
+	else if (DataTable[REG_DBG] == 4)
+		GPIO_SetState(GPIO_PNEUM_1, State);
+	else if (DataTable[REG_DBG] == 5)
+		GPIO_SetState(GPIO_PNEUM_1, State);
+	else if (DataTable[REG_DBG] == 0)
+	{
+		GPIO_SetState(GPIO_IND_1, false);
+		GPIO_SetState(GPIO_IND_2, false);
+		GPIO_SetState(GPIO_PNEUM_1, false);
+		GPIO_SetState(GPIO_PNEUM_2, false);
+		GPIO_SetState(GPIO_PNEUM_3, false);
+	}
 }
 //-----------------------------
 
-void LL_SetStateSFRedLed(bool State)
+void LL_SetStateSFOutput(bool State)
 {
-	GPIO_SetState(GPIO_SF_RED_LED, State);
+	GPIO_SetState(GPIO_SF_OUT, State);
 }
 //-----------------------------
 
-void LL_SetStateSFGreenLed(bool State)
+bool LL_GetStateLimitSwitchDUT()
 {
-	GPIO_SetState(GPIO_SF_GRN_LED, State);
+	bool MeasuredResult;
+
+	if (DataTable[REG_DBG] == 1)
+		MeasuredResult = GPIO_GetState(GPIO_DUT_1);
+	if (DataTable[REG_DBG] == 2)
+		MeasuredResult = GPIO_GetState(GPIO_DUT_2);
+	if (DataTable[REG_DBG] == 3)
+		MeasuredResult = GPIO_GetState(GPIO_DUT_3);
+	if (DataTable[REG_DBG] == 4)
+		MeasuredResult = GPIO_GetState(GPIO_DUT_4);
+
+	return MeasuredResult;
 }
 //-----------------------------
 
-void LL_WriteSPI(uint8_t SPI_Data[], uint8_t Data_Length)
+bool LL_GetStateLimitSwitchAdapter()
 {
-	// Reset all shift-registers
-	GPIO_SetState(GPIO_SPI_RST, false);
-	DELAY_MS(5);
-	GPIO_SetState(GPIO_SPI_RST, true);
+	bool MeasuredResult;
 
-	// Latch outputs of shift-registers
-	GPIO_SetState(GPIO_SPI_SS, false);
+	if (DataTable[REG_DBG] == 1)
+		MeasuredResult = GPIO_GetState(GPIO_ADPTR_TOP);
+	if (DataTable[REG_DBG] == 2)
+		MeasuredResult = GPIO_GetState(GPIO_ADPTR_BOT);
 
-	// Send 15 bytes of data
-	for (int i = 0; i<=Data_Length; i++)
-		SPI_WriteByte(SPI3, SPI_Data[i]);
-
-	// Turn outputs ON
-	GPIO_SetState(GPIO_SPI_OE, true);
+	return MeasuredResult;
 }
 //-----------------------------
 
-void LL_StopSPI()
+float LL_MeasureIDTop()
 {
-	// Turn outputs OFF
-	GPIO_SetState(GPIO_SPI_OE, false);
+	float MeasuredVoltageIDTop;
 
-	GPIO_SetState(GPIO_SPI_SS, true);
-
-	// Reset all shift-registers
-	GPIO_SetState(GPIO_SPI_RST, false);
-	DELAY_MS(5);
-	GPIO_SetState(GPIO_SPI_RST, true);
-}
-//-----------------------------
-
-void LL_SetStateSF_EN(bool State)
-{
-	GPIO_SetState(GPIO_SF_EN, State);
-}
-//-----------------------------
-
-void LL_SetStateSD_EN(bool State)
-{
-	GPIO_SetState(GPIO_SD_EN, State);
-}
-//-----------------------------
-
-bool LL_SelfTestMeasure()
-{
-	float MeasuredTestVoltage, Error;
-
-	// Enable self-test current
-	LL_SetStateSD_EN(true);
-	DELAY_MS(5);
 	// Measure test-point and convert value to voltage
-	MeasuredTestVoltage = (float)ADC_Measure(ADC1, ADC_V_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-	// Disable self-test current
-	LL_SetStateSD_EN(false);
+	MeasuredVoltageIDTop = (float)ADC_Measure(ADC1, ADC_ID_TOP_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
 
-	// Compare measured value of voltage to constant value of closed-circuit (normal operation mode) voltage ADC_V_CC
-	Error = (MeasuredTestVoltage - ADC_V_CC) / ADC_V_CC * 100;
-	return (Error >= DataTable[REG_SFTST_V_ALLOWED_ERR]) ? false : true;
+	return MeasuredVoltageIDTop;
 }
+//-----------------------------
+
+float LL_MeasureIDBot()
+{
+	float MeasuredVoltageIDBot;
+
+	// Measure test-point and convert value to voltage
+	MeasuredVoltageIDBot = (float)ADC_Measure(ADC1, ADC_ID_BOT_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
+
+	return MeasuredVoltageIDBot;
+}
+//-----------------------------
+
+float LL_MeasurePressure()
+{
+	float MeasuredVoltagePressure;
+
+	// Measure test-point and convert value to voltage
+	MeasuredVoltagePressure = (float)ADC_Measure(ADC1, ADC_ID_PRESSURE_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
+
+	return MeasuredVoltagePressure;
+}
+//-----------------------------

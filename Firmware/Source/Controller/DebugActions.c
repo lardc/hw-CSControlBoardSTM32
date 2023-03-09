@@ -10,64 +10,81 @@
 #include "DataTable.h"
 
 // Variables
-uint8_t SPI_Data[] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0x0A};
-uint8_t Data_Length = 0x74;
 
 // Functions
 
-// Send pulse to Front Panel LED
-void DBACT_ToggleFPLed()
+// Send pulse to chosen digital output. Choosing output is available via [REG_DBG] register:	[REG_DBG] = 1 --> GPIO_IND_1,
+// 																								[REG_DBG] = 2 --> GPIO_IND_2,
+// 																								[REG_DBG] = 3 --> GPIO_PNEUM_1,
+// 																								[REG_DBG] = 4 --> GPIO_PNEUM_2,
+// 																								[REG_DBG] = 5 --> GPIO_PNEUM_3.
+void DBACT_ToggleDigitalOutput()
 {
-	LL_SetStateFPLed(true);
+	LL_SetStateDigitalOutput(true);
 	DELAY_MS(1000);
-	LL_SetStateFPLed(false);
+	LL_SetStateDigitalOutput(false);
 }
 //-----------------------
 
-// Send pulse to Safety Subsystem Red LED
-void DBACT_ToggleSFRedLed()
+// Send pulse to Safety Subsystem Output
+void DBACT_ToggleSFOutput()
 {
-	LL_SetStateSFRedLed(true);
+	LL_SetStateSFOutput(true);
 	DELAY_MS(1000);
-	LL_SetStateSFRedLed(false);
+	LL_SetStateSFOutput(false);
 }
 //-----------------------
 
-// Send pulse to Safety Subsystem Green LED
-void DBACT_ToggleSFGreenLed()
+// Get state of chosen DUT. Choosing DUT is  available via [REG_DBG] register:	[REG_DBG] = 1 --> GPIO_DUT_1,
+// 																				[REG_DBG] = 2 --> GPIO_DUT_2,
+// 																				[REG_DBG] = 3 --> GPIO_DUT_3,
+// 																				[REG_DBG] = 4 --> GPIO_DUT_4.
+void DBACT_GetStateLimitSwitchDUT()
 {
-	LL_SetStateSFGreenLed(true);
-	DELAY_MS(1000);
-	LL_SetStateSFGreenLed(false);
+	bool MeasurementResult;
+
+	MeasurementResult = LL_GetStateLimitSwitchDUT();
+	DataTable[REG_RSLT] = MeasurementResult;
 }
 //-----------------------
 
-// Write variable SPI_Data via SPI
-void DBACT_WriteSPI()
+// Get state of chosen side of Adapter. Choosing side is  available via [REG_DBG] register:	[REG_DBG] = 1 --> GPIO_ADPTR_TOP,
+// 																							[REG_DBG] = 2 --> GPIO_ADPTR_BOT.
+void DBACT_GetStateLimitSwitchAdapter()
 {
-	LL_WriteSPI(SPI_Data, Data_Length);
+	bool MeasurementResult;
+
+	MeasurementResult = LL_GetStateLimitSwitchAdapter();
+	DataTable[REG_RSLT] = MeasurementResult;
 }
 //-----------------------
 
-// Stop commutation, reset shift-registers, turn outputs Hi-Z
-void DBACT_StopSPI()
+// Measure the voltage at the resistor divider on the top side of the adapter
+void DBACT_MeasureIDDividerTop()
 {
-	LL_StopSPI();
+	float MeasurementResult;
+
+	MeasurementResult = LL_MeasureIDTop();
+	DataTable[REG_RSLT] = MeasurementResult;
 }
 //-----------------------
 
-// Safety EN check
-void DBACT_ToggleSF_EN()
+// Measure the voltage at the resistor divider on the bottom side of the adapter
+void DBACT_MeasureIDDividerBot()
 {
-	LL_SetStateSF_EN(true);
-	DELAY_MS(1000);
-	LL_SetStateSF_EN(false);
+	float MeasurementResult;
+
+	MeasurementResult = LL_MeasureIDBot();
+	DataTable[REG_RSLT] = MeasurementResult;
 }
 //-----------------------
 
-// Turn self-test current ON, measure voltage with ADC, compare result with DataTable constant
-void DBACT_SelfTestMeasure()
+// Measure the voltage from the pressure sensor
+void DBACT_MeasurePressure()
 {
-	LL_SelfTestMeasure();
+	float MeasurementResult;
+
+	MeasurementResult = LL_MeasurePressure();
+	DataTable[REG_RSLT] = MeasurementResult;
 }
 //-----------------------

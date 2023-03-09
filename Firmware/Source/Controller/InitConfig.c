@@ -20,46 +20,37 @@ void INITCFG_ConfigIO()
 	
 	// Выходы
 	GPIO_InitPushPullOutput(GPIO_LED);
-	GPIO_InitPushPullOutput(GPIO_FP_LED);
-	GPIO_InitPushPullOutput(GPIO_SPI_SS);
-	GPIO_InitPushPullOutput(GPIO_SPI_RST);
-	GPIO_InitPushPullOutput(GPIO_SPI_OE);
-	GPIO_InitPushPullOutput(GPIO_SF_RED_LED);
-	GPIO_InitPushPullOutput(GPIO_SF_GRN_LED);
-	GPIO_InitPushPullOutput(GPIO_SF_EN);
-	GPIO_InitPushPullOutput(GPIO_SD_EN);
-
+	GPIO_InitPushPullOutput(GPIO_IND_1);
+	GPIO_InitPushPullOutput(GPIO_IND_2);
+	GPIO_InitPushPullOutput(GPIO_PNEUM_1);
+	GPIO_InitPushPullOutput(GPIO_PNEUM_2);
+	GPIO_InitPushPullOutput(GPIO_PNEUM_3);
+	GPIO_InitPushPullOutput(GPIO_SF_OUT);
 
 	// Входы
-	GPIO_InitInput(GPIO_SF_TRIG, NoPull);
+	GPIO_InitInput(GPIO_DUT_1, NoPull);
+	GPIO_InitInput(GPIO_DUT_2, NoPull);
+	GPIO_InitInput(GPIO_DUT_3, NoPull);
+	GPIO_InitInput(GPIO_DUT_4, NoPull);
+	GPIO_InitInput(GPIO_ADPTR_TOP, NoPull);
+	GPIO_InitInput(GPIO_ADPTR_BOT, NoPull);
 
 	// Начальная установка состояний выводов
 	GPIO_SetState(GPIO_LED, false);
-	GPIO_SetState(GPIO_FP_LED, false);
-	GPIO_SetState(GPIO_SPI_SS, true);
-	GPIO_SetState(GPIO_SPI_RST, true);
-	GPIO_SetState(GPIO_SPI_OE, true);
-	GPIO_SetState(GPIO_SF_RED_LED, false);
-	GPIO_SetState(GPIO_SF_GRN_LED, false);
-	GPIO_SetState(GPIO_SF_EN, true);
-	GPIO_SetState(GPIO_SD_EN, false);
+	GPIO_SetState(GPIO_IND_1, false);
+	GPIO_SetState(GPIO_IND_2, true);
+	GPIO_SetState(GPIO_PNEUM_1, true);
+	GPIO_SetState(GPIO_PNEUM_2, true);
+	GPIO_SetState(GPIO_PNEUM_3, false);
+	GPIO_SetState(GPIO_SF_OUT, false);
 
 	// Альтернативные функции
 	GPIO_InitAltFunction(GPIO_ALT_UART1_RX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_ALT_UART1_TX, AltFn_7);
 	GPIO_InitAltFunction(GPIO_ALT_CAN1_RX, AltFn_9);
 	GPIO_InitAltFunction(GPIO_ALT_CAN1_TX, AltFn_9);
-	GPIO_InitAltFunction(GPIO_ALT_SPI1_CLK, AltFn_5);
-	GPIO_InitAltFunction(GPIO_ALT_SPI1_DAT, AltFn_5);
 }
 
-//------------------------------------------------
-
-void INITCFG_ConfigExtInterrupt()
-{
-	// Вход сигнала безопасности
-	EXTI_Init(EXTI_SAFETY_IN, RISE_TRIG);
-}
 //------------------------------------------------
 
 void INITCFG_ConfigUART()
@@ -95,9 +86,3 @@ void INITCFG_ConfigADC()
 	ADC_Enable(ADC1);
 }
 //-----------------------------------------------
-
-void INITCFG_ConfigSPI8b()
-{
-	SPI_Init8b(SPI3, SPI3_BAUDRATE_BITS, SPI3_LSB_FIRST);
-}
-//------------------------------------------------
