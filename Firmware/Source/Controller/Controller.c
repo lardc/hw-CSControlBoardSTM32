@@ -120,10 +120,14 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 void CONTROL_LogicProcess()
 {
-	switch(CONTROL_SubState)
+	if(CONTROL_State == DS_InProcess)
 	{
-		default:
-			break;
+		switch(CONTROL_SubState)
+		{
+
+			default:
+				break;
+		}
 	}
 
 	if(CONTROL_State == DS_SelfTest)

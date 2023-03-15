@@ -18,11 +18,11 @@
 
 // Определения для выходных портов
 GPIO_PortPinSettingMacro GPIO_LED				= {GPIOB, Pin_10};
-GPIO_PortPinSettingMacro GPIO_IND_1				= {GPIOB, Pin_5};
-GPIO_PortPinSettingMacro GPIO_IND_2				= {GPIOB, Pin_6};
-GPIO_PortPinSettingMacro GPIO_PNEUM_1			= {GPIOB, Pin_7};
-GPIO_PortPinSettingMacro GPIO_PNEUM_2			= {GPIOB, Pin_8};
-GPIO_PortPinSettingMacro GPIO_PNEUM_3			= {GPIOB, Pin_9};
+GPIO_PortPinSettingMacro GPIO_IND_CSM			= {GPIOB, Pin_5};
+GPIO_PortPinSettingMacro GPIO_IND_ADPTR			= {GPIOB, Pin_6};
+GPIO_PortPinSettingMacro GPIO_PNEUM_TOP			= {GPIOB, Pin_7};
+GPIO_PortPinSettingMacro GPIO_PNEUM_BOT			= {GPIOB, Pin_8};
+GPIO_PortPinSettingMacro GPIO_PNEUM_DUT			= {GPIOB, Pin_9};
 GPIO_PortPinSettingMacro GPIO_SF_OUT			= {GPIOA, Pin_2};
 
 // Определения для входных портов

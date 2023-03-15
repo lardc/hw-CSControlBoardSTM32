@@ -13,16 +13,48 @@
 
 // Functions
 
-// Send pulse to chosen digital output. Choosing output is available via [REG_DBG] register:	[REG_DBG] = 1 --> GPIO_IND_1,
-// 																								[REG_DBG] = 2 --> GPIO_IND_2,
-// 																								[REG_DBG] = 3 --> GPIO_PNEUM_1,
-// 																								[REG_DBG] = 4 --> GPIO_PNEUM_2,
-// 																								[REG_DBG] = 5 --> GPIO_PNEUM_3.
-void DBACT_ToggleDigitalOutput()
+//  Send pulse to "CSM Block" indicator
+void DBACT_ToggleIndCSM()
 {
-	LL_SetStateDigitalOutput(true);
+	LL_SetStateIndCSM(true);
 	DELAY_MS(1000);
-	LL_SetStateDigitalOutput(false);
+	LL_SetStateIndCSM(false);
+}
+//-----------------------
+
+//  Send pulse to "Adapter Block" indicator
+void DBACT_ToggleIndADPTR()
+{
+	LL_SetStateIndADPTR(true);
+	DELAY_MS(1000);
+	LL_SetStateIndADPTR(false);
+}
+//-----------------------
+
+// Send pulse to Top adapter blocking pneumatic cylinder
+void DBACT_TogglePneumTOP()
+{
+	LL_SetStatePneumTOP(true);
+	DELAY_MS(1000);
+	LL_SetStatePneumTOP(false);
+}
+//-----------------------
+
+// Send pulse to Bottom adapter blocking pneumatic cylinder
+void DBACT_TogglePneumBOT()
+{
+	LL_SetStatePneumBOT(true);
+	DELAY_MS(1000);
+	LL_SetStatePneumBOT(false);
+}
+//-----------------------
+
+// Send pulse to DUT blocking pneumatic cylinder
+void DBACT_TogglePneumDUT()
+{
+	LL_SetStatePneumDUT(true);
+	DELAY_MS(1000);
+	LL_SetStatePneumDUT(false);
 }
 //-----------------------
 
@@ -35,31 +67,49 @@ void DBACT_ToggleSFOutput()
 }
 //-----------------------
 
-// Get state of chosen DUT. Choosing DUT is  available via [REG_DBG] register:	[REG_DBG] = 1 --> GPIO_DUT_1,
-// 																				[REG_DBG] = 2 --> GPIO_DUT_2,
-// 																				[REG_DBG] = 3 --> GPIO_DUT_3,
-// 																				[REG_DBG] = 4 --> GPIO_DUT_4.
-void DBACT_GetStateLimitSwitchDUT()
+// Get state of presence sensor of DUT1
+void DBACT_GetStatePresenceSensorDUT1()
 {
-	bool MeasurementResult;
-
-	MeasurementResult = LL_GetStateLimitSwitchDUT();
-	DataTable[REG_RSLT] = MeasurementResult;
+	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT1();
 }
 //-----------------------
 
-// Get state of chosen side of Adapter. Choosing side is  available via [REG_DBG] register:	[REG_DBG] = 1 --> GPIO_ADPTR_TOP,
-// 																							[REG_DBG] = 2 --> GPIO_ADPTR_BOT.
-void DBACT_GetStateLimitSwitchAdapter()
+// Get state of presence sensor of DUT2
+void DBACT_GetStatePresenceSensorDUT2()
 {
-	bool MeasurementResult;
-
-	MeasurementResult = LL_GetStateLimitSwitchAdapter();
-	DataTable[REG_RSLT] = MeasurementResult;
+	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT2();
 }
 //-----------------------
 
-// Measure the voltage at the resistor divider on the top side of the adapter
+// Get state of presence sensor of DUT3
+void DBACT_GetStatePresenceSensorDUT3()
+{
+	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT3();
+}
+//-----------------------
+
+// Get state of presence sensor of DUT4
+void DBACT_GetStatePresenceSensorDUT4()
+{
+	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT4();
+}
+//-----------------------
+
+// Get state of limit switch at the top adapter
+void DBACT_GetStateLimitSwitchTOP()
+{
+	DataTable[REG_RSLT] = LL_GetStateLimitSwitchTopAdapter();
+}
+//-----------------------
+
+// Get state of limit switch at the bottom adapter
+void DBACT_GetStateLimitSwitchBOT()
+{
+	DataTable[REG_RSLT] = LL_GetStateLimitSwitchBotAdapter();
+}
+//-----------------------
+
+// Measure voltage at the resistor divider on the top side of the adapter
 void DBACT_MeasureIDDividerTop()
 {
 	float MeasurementResult;
@@ -69,7 +119,7 @@ void DBACT_MeasureIDDividerTop()
 }
 //-----------------------
 
-// Measure the voltage at the resistor divider on the bottom side of the adapter
+// Measure voltage at the resistor divider on the bottom side of the adapter
 void DBACT_MeasureIDDividerBot()
 {
 	float MeasurementResult;
@@ -79,7 +129,7 @@ void DBACT_MeasureIDDividerBot()
 }
 //-----------------------
 
-// Measure the voltage from the pressure sensor
+// Measure voltage from the pressure sensor
 void DBACT_MeasurePressure()
 {
 	float MeasurementResult;

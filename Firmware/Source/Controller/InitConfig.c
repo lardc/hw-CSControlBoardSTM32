@@ -20,11 +20,11 @@ void INITCFG_ConfigIO()
 	
 	// Выходы
 	GPIO_InitPushPullOutput(GPIO_LED);
-	GPIO_InitPushPullOutput(GPIO_IND_1);
-	GPIO_InitPushPullOutput(GPIO_IND_2);
-	GPIO_InitPushPullOutput(GPIO_PNEUM_1);
-	GPIO_InitPushPullOutput(GPIO_PNEUM_2);
-	GPIO_InitPushPullOutput(GPIO_PNEUM_3);
+	GPIO_InitPushPullOutput(GPIO_IND_CSM);
+	GPIO_InitPushPullOutput(GPIO_IND_ADPTR);
+	GPIO_InitPushPullOutput(GPIO_PNEUM_TOP);
+	GPIO_InitPushPullOutput(GPIO_PNEUM_BOT);
+	GPIO_InitPushPullOutput(GPIO_PNEUM_DUT);
 	GPIO_InitPushPullOutput(GPIO_SF_OUT);
 
 	// Входы
@@ -37,11 +37,11 @@ void INITCFG_ConfigIO()
 
 	// Начальная установка состояний выводов
 	GPIO_SetState(GPIO_LED, false);
-	GPIO_SetState(GPIO_IND_1, false);
-	GPIO_SetState(GPIO_IND_2, true);
-	GPIO_SetState(GPIO_PNEUM_1, true);
-	GPIO_SetState(GPIO_PNEUM_2, true);
-	GPIO_SetState(GPIO_PNEUM_3, false);
+	GPIO_SetState(GPIO_IND_CSM, false);
+	GPIO_SetState(GPIO_IND_ADPTR, false);
+	GPIO_SetState(GPIO_PNEUM_TOP, false);
+	GPIO_SetState(GPIO_PNEUM_BOT, false);
+	GPIO_SetState(GPIO_PNEUM_DUT, false);
 	GPIO_SetState(GPIO_SF_OUT, false);
 
 	// Альтернативные функции

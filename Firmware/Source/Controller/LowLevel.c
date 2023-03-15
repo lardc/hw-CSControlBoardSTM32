@@ -14,26 +14,33 @@ void LL_ToggleBoardLED()
 }
 //-----------------------------
 
-void LL_SetStateDigitalOutput(bool State)
+void LL_SetStateIndCSM(bool State)
 {
-	if (DataTable[REG_DBG] == 1)
-		GPIO_SetState(GPIO_IND_1, State);
-	else if (DataTable[REG_DBG] == 2)
-		GPIO_SetState(GPIO_IND_2, State);
-	else if (DataTable[REG_DBG] == 3)
-		GPIO_SetState(GPIO_PNEUM_1, State);
-	else if (DataTable[REG_DBG] == 4)
-		GPIO_SetState(GPIO_PNEUM_1, State);
-	else if (DataTable[REG_DBG] == 5)
-		GPIO_SetState(GPIO_PNEUM_1, State);
-	else if (DataTable[REG_DBG] == 0)
-	{
-		GPIO_SetState(GPIO_IND_1, false);
-		GPIO_SetState(GPIO_IND_2, false);
-		GPIO_SetState(GPIO_PNEUM_1, false);
-		GPIO_SetState(GPIO_PNEUM_2, false);
-		GPIO_SetState(GPIO_PNEUM_3, false);
-	}
+	GPIO_SetState(GPIO_IND_CSM, State);
+}
+//-----------------------------
+
+void LL_SetStateIndADPTR(bool State)
+{
+	GPIO_SetState(GPIO_IND_ADPTR, State);
+}
+//-----------------------------
+
+void LL_SetStatePneumTOP(bool State)
+{
+	GPIO_SetState(GPIO_PNEUM_TOP, State);
+}
+//-----------------------------
+
+void LL_SetStatePneumBOT(bool State)
+{
+	GPIO_SetState(GPIO_PNEUM_BOT, State);
+}
+//-----------------------------
+
+void LL_SetStatePneumDUT(bool State)
+{
+	GPIO_SetState(GPIO_PNEUM_DUT, State);
 }
 //-----------------------------
 
@@ -43,33 +50,39 @@ void LL_SetStateSFOutput(bool State)
 }
 //-----------------------------
 
-bool LL_GetStateLimitSwitchDUT()
+bool LL_GetStatePresenceSensorDUT1()
 {
-	bool MeasuredResult;
-
-	if (DataTable[REG_DBG] == 1)
-		MeasuredResult = GPIO_GetState(GPIO_DUT_1);
-	if (DataTable[REG_DBG] == 2)
-		MeasuredResult = GPIO_GetState(GPIO_DUT_2);
-	if (DataTable[REG_DBG] == 3)
-		MeasuredResult = GPIO_GetState(GPIO_DUT_3);
-	if (DataTable[REG_DBG] == 4)
-		MeasuredResult = GPIO_GetState(GPIO_DUT_4);
-
-	return MeasuredResult;
+	return GPIO_GetState(GPIO_DUT_1);
 }
 //-----------------------------
 
-bool LL_GetStateLimitSwitchAdapter()
+bool LL_GetStatePresenceSensorDUT2()
 {
-	bool MeasuredResult;
+	return GPIO_GetState(GPIO_DUT_2);
+}
+//-----------------------------
 
-	if (DataTable[REG_DBG] == 1)
-		MeasuredResult = GPIO_GetState(GPIO_ADPTR_TOP);
-	if (DataTable[REG_DBG] == 2)
-		MeasuredResult = GPIO_GetState(GPIO_ADPTR_BOT);
+bool LL_GetStatePresenceSensorDUT3()
+{
+	return GPIO_GetState(GPIO_DUT_3);
+}
+//-----------------------------
 
-	return MeasuredResult;
+bool LL_GetStatePresenceSensorDUT4()
+{
+	return GPIO_GetState(GPIO_DUT_4);
+}
+//-----------------------------
+
+bool LL_GetStateLimitSwitchTopAdapter()
+{
+	return GPIO_GetState(GPIO_ADPTR_TOP);
+}
+//-----------------------------
+
+bool LL_GetStateLimitSwitchBotAdapter()
+{
+	return GPIO_GetState(GPIO_ADPTR_BOT);
 }
 //-----------------------------
 
