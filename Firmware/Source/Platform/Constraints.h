@@ -8,32 +8,28 @@
 
 //Definitions
 //
-#define SFTST_V_ALLOWED_ERR_MIN		0
-#define SFTST_V_ALLOWED_ERR_MAX		20
-#define SFTST_V_ALLOWED_ERR_DIF		10
-//
-#define COEF_K_MIN					-INT16S_MAX
-#define COEF_K_MAX					INT16S_MAX
-#define COEF_K_DEF					1
-//
-#define OFFSET_MIN					-INT16S_MAX
-#define OFFSET_MAX					INT16S_MAX
-#define OFFSET_DEF					0
-//
-#define COEF_P2_MIN					-INT16S_MAX
-#define COEF_P2_MAX					INT16S_MAX
-#define COEF_P2_DEF					0
-//
-#define COEF_P1_MIN					-INT16S_MAX
-#define COEF_P1_MAX					INT16S_MAX
-#define COEF_P1_DEF					1
-//
-#define COEF_P0_MIN					-INT16S_MAX
-#define COEF_P0_MAX					INT16U_MAX
-#define COEF_P0_DEF					0
+#define ADPTR_MIHM_MIN				140		// в мВ
+#define ADPTR_MIHM_MAX				180		// в мВ
+#define ADPTR_MIHV_MIN				280		// в мВ
+#define ADPTR_MIHV_MAX				420		// в мВ
+#define ADPTR_MISM_MIN				560		// в мВ
+#define ADPTR_MISM_MAX				800		// в мВ
+#define ADPTR_MISV_MIN				900		// в мВ
+#define ADPTR_MISV_MAX				1200	// в мВ
+#define ADPTR_MIXM_MIN				1450	// в мВ
+#define ADPTR_MIXM_MAX				1900	// в мВ
+#define ADPTR_MIXV_MIN				2250	// в мВ
+#define ADPTR_MIXV_MAX				2750	// в мВ
 //
 #define NO							0
 #define YES							1
+//
+#define MIHM						0
+#define MIHV						1
+#define MISM						2
+#define MISV						3
+#define MIXM						4
+#define MIXV						5
 //
 
 // Types

@@ -23,6 +23,8 @@
 #define ACT_DBG_MEASURE_ID_BOT			33	// Проверка работы системы идентификации нижнего адаптера
 #define ACT_DBG_MEASURE_PRESSURE		34	// Опрос датчика давления
 
+#define ACT_PREPARE_CSM					50	// Предварительный опрос всех датчиков, идентификация адаптеров
+
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
 #define ACT_RESET_TO_DEFAULT			202	// Сброс DataTable в состояние по умолчанию
@@ -32,13 +34,21 @@
 
 // Регистры
 // Сохраняемые регистры
+#define REG_ADPTR_MIHM					0	// Регистр для хранения значения напряжения (в мВ) адаптера MIHM
+#define REG_ADPTR_MIHV					1	// Регистр для хранения значения напряжения (в мВ) адаптера MIHV
+#define REG_ADPTR_MISM					2	// Регистр для хранения значения напряжения (в мВ) адаптера MISM
+#define REG_ADPTR_MISV					3	// Регистр для хранения значения напряжения (в мВ) адаптера MISV
+#define REG_ADPTR_MIXM					4	// Регистр для хранения значения напряжения (в мВ) адаптера MIXM
+#define REG_ADPTR_MIXV					5	// Регистр для хранения значения напряжения (в мВ) адаптера MIXV
 
 // Несохраняемые регистры чтения-записи
 #define REG_DBG							150	// Отладочный регистр
 #define REG_RSLT						151	// Отладочный регистр для хранения результатов измерений датчиков
 #define REG_PRESSURE					152 // Регистр для хранения значения давления
-#define REG_ID_TOP						153	// Регистр для хранения значения напряжения на делителе напряжения (идентификация верхнего адаптера)
-#define REG_ID_BOT						154	// Регистр для хранения значения напряжения на делителе напряжения (идентификация нижнего адаптера)
+#define REG_ID_ADPTR_SET				153	// Регистр для хранения значения идентификатора адаптеров, установленного верхним уровнем:
+											// (0 - MIHM, 1 - MIHV, 2 - MISM, 3 - MISV, 4 - MIXM, 5 - MIXV)
+#define REG_ID_TOP_ADPTR_FACTUAL		154	// Регистр для измерянного значения напряжения (в мВ) идентификатора верхнего адаптера
+#define REG_ID_BOT_ADPTR_FACTUAL		155	// Регистр для измерянного значения напряжения (в мВ) идентификатора нижнего адаптера
 
 // Регистры только чтение
 #define REG_DEV_STATE					192	// Регистр состояния
@@ -47,8 +57,14 @@
 #define REG_WARNING						195	// Регистр Warning
 #define REG_PROBLEM						196	// Регистр Problem
 #define REG_OP_RESULT					197	// Регистр результата операции
-#define REG_SELF_TEST_OP_RESULT			198	// Регистр результата самотестирования
+#define REG_SELF_TEST_OP_RESULT			198 // Регистр результата самотестирования
 #define REG_SUB_STATE					199	// Регистр вспомогательного состояния
+#define REG_TOP_ADPTR_STATE				200	// Регистр состояния верхнего адаптера (задвинут/открыт)
+#define REG_BOT_ADPTR_STATE				201	// Регистр состояния нижнего адаптера (задвинут/открыт)
+#define REG_ID_TOP_ADPTR				202	// Регистр для хранения значения идентификатора верхнего адаптера, идентифицированного МК:
+											// (0 - MIHM, 1 - MIHV, 2 - MISM, 3 - MISV, 4 - MIXM, 5 - MIXV)
+#define REG_ID_BOT_ADPTR				203	// Регистр для хранения значения идентификатора нижнего адаптера, идентифицированного МК:
+											// (0 - MIHM, 1 - MIHV, 2 - MISM, 3 - MISV, 4 - MIXM, 5 - MIXV)
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
@@ -64,7 +80,11 @@
 
 //  Fault and disable codes
 #define DF_NONE							0
-#define DF_TOP_ADAPTER_NOT_CLOSED		1	// Верхний адаптер не задвинут до конца
+#define DF_TOP_ADAPTER_OPENED			1	// Верхний адаптер не задвинут до конца
+#define DF_BOT_ADAPTER_OPENED			2	// Нижний адаптер не задвинут до конца
+#define DF_TOP_ADAPTER_MISMATCHED		3	// Установленный верхний адаптер не совпадает с заданым адаптером для проведения измерений
+#define DF_BOT_ADAPTER_MISMATCHED		4	// Установленный нижний адаптер не совпадает с заданым адаптером для проведения измерений
+#define DF_ADAPTERS_MISMATCHED			5	// Несовпадение верхнего и нижнего адаптеров
 
 // Problem
 #define PROBLEM_NONE					0

@@ -8,12 +8,12 @@
 // Constants
 //
 const TableItemConstraint Constraint[DATA_TABLE_WP_START] = {
-		{SFTST_V_ALLOWED_ERR_MIN, SFTST_V_ALLOWED_ERR_MAX, SFTST_V_ALLOWED_ERR_DIF},// 0
-		{0, 0, 0},																	// 1
-		{0, 0, 0},																	// 2
-		{0, 0, 0},																	// 3
-		{0, 0, 0},																	// 4
-		{0, 0, 0},																	// 5
+		{ADPTR_MIHM_MIN, ADPTR_MIHM_MAX, 0},										// 0
+		{ADPTR_MIHV_MIN, ADPTR_MIHV_MAX, 0},										// 1
+		{ADPTR_MISM_MIN, ADPTR_MISM_MAX, 0},										// 2
+		{ADPTR_MISV_MIN, ADPTR_MISV_MAX, 0},										// 3
+		{ADPTR_MIXM_MIN, ADPTR_MIXM_MAX, 0},										// 4
+		{ADPTR_MIXV_MIN, ADPTR_MIXV_MAX, 0},										// 5
 		{0, 0, 0},																	// 6
 		{0, 0, 0},																	// 7
 		{0, 0, 0},																	// 8

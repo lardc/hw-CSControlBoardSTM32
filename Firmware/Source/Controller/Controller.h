@@ -20,7 +20,15 @@ typedef enum __DeviceState
 
 typedef enum __DeviceSubState
 {
-	SS_None = 0
+	SS_None = 0,
+	SS_TopAdapterStateCheck = 1,
+	SS_TopAdapterID = 2,
+	SS_TopAdapterIDCheck = 3,
+	SS_BotAdapterStateCheck = 4,
+	SS_BotAdapterID = 5,
+	SS_BotAdapterIDCheck = 6,
+	SS_AdaptersMatchingCheck = 7,
+	SS_DUTPresenceCheck = 8
 } DeviceSubState;
 
 // Variables

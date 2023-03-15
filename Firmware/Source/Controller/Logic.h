@@ -16,5 +16,7 @@ typedef enum __TestType
 // Functions
 //
 void LOGIC_ResetOutputRegisters();
+void LOGIC_TopAdapterIdentification();
+void LOGIC_BotAdapterIdentification();
 
 #endif /* LOGIC_H_ */
