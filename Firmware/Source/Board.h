@@ -23,15 +23,15 @@ GPIO_PortPinSettingMacro GPIO_IND_ADPTR			= {GPIOB, Pin_6};
 GPIO_PortPinSettingMacro GPIO_PNEUM_TOP			= {GPIOB, Pin_7};
 GPIO_PortPinSettingMacro GPIO_PNEUM_BOT			= {GPIOB, Pin_8};
 GPIO_PortPinSettingMacro GPIO_PNEUM_DUT			= {GPIOB, Pin_9};
-GPIO_PortPinSettingMacro GPIO_SF_OUT			= {GPIOA, Pin_2};
+GPIO_PortPinSettingMacro GPIO_SF_OUT			= {GPIOB, Pin_2};
 
 // Определения для входных портов
-GPIO_PortPinSettingMacro GPIO_DUT_1				= {GPIOA, Pin_7};
-GPIO_PortPinSettingMacro GPIO_DUT_2				= {GPIOA, Pin_7};
-GPIO_PortPinSettingMacro GPIO_DUT_3				= {GPIOA, Pin_7};
-GPIO_PortPinSettingMacro GPIO_DUT_4				= {GPIOA, Pin_7};
-GPIO_PortPinSettingMacro GPIO_ADPTR_TOP			= {GPIOA, Pin_7};
-GPIO_PortPinSettingMacro GPIO_ADPTR_BOT			= {GPIOA, Pin_7};
+GPIO_PortPinSettingMacro GPIO_DUT_1				= {GPIOB, Pin_12};
+GPIO_PortPinSettingMacro GPIO_DUT_2				= {GPIOB, Pin_13};
+GPIO_PortPinSettingMacro GPIO_DUT_3				= {GPIOB, Pin_14};
+GPIO_PortPinSettingMacro GPIO_DUT_4				= {GPIOA, Pin_15};
+GPIO_PortPinSettingMacro GPIO_ADPTR_TOP			= {GPIOB, Pin_3};
+GPIO_PortPinSettingMacro GPIO_ADPTR_BOT			= {GPIOB, Pin_4};
 
 
 // Определения для портов альтернативных функций
