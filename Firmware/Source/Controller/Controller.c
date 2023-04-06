@@ -13,6 +13,7 @@
 #include "Logic.h"
 #include "BCCIxParams.h"
 #include "SelfTest.h"
+#include "Constraints.h"
 
 // Definitions
 //
@@ -36,7 +37,7 @@ volatile Int64U CONTROL_TimeCounter = 0;
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
 void CONTROL_UpdateWatchDog();
 void CONTROL_ResetToDefaultState();
-void CONTROL_LogicProcess();
+void CONTROL_CSMPrepareLogic();
 void CONTROL_SaveTestResult();
 
 // Functions
@@ -66,9 +67,10 @@ void CONTROL_ResetToDefaultState()
 
 void CONTROL_Idle()
 {
-	CONTROL_LogicProcess();
-
 	DEVPROFILE_ProcessRequests();
+
+	CONTROL_CSMPrepareLogic();
+
 	CONTROL_UpdateWatchDog();
 }
 //------------------------------------------
@@ -98,16 +100,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 					*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 
-		case ACT_PREPARE_CSM:
-			if(CONTROL_State == DS_Ready)
-			{
-				CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterStateCheck);
-			}
-			else
-				if (CONTROL_State == DS_InProcess)
-					*pUserError = ERR_OPERATION_BLOCKED;
-				else
-					*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 
 		case ACT_CLR_FAULT:
@@ -122,6 +114,17 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			DataTable[REG_WARNING] = WARNING_NONE;
 			break;
 
+		case ACT_PREPARE_CSM:
+			if(CONTROL_State == DS_Ready)
+			{
+				CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterStateCheck);
+			}
+			else
+				if (CONTROL_State == DS_InProcess)
+					*pUserError = ERR_OPERATION_BLOCKED;
+				else
+					*pUserError = ERR_DEVICE_NOT_READY;
+
 		default:
 			return DIAG_HandleDiagnosticAction(ActionID, pUserError);
 			
@@ -130,68 +133,55 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 }
 //-----------------------------------------------
 
-void CONTROL_LogicProcess()
+void CONTROL_CSMPrepareLogic()
 {
 	if(CONTROL_State == DS_InProcess)
 	{
 		switch(CONTROL_SubState)
 		{
 			case SS_TopAdapterStateCheck:
-				DataTable[REG_TOP_ADPTR_STATE] = LL_GetStateLimitSwitchTopAdapter();
-
-				if (DataTable[REG_TOP_ADPTR_STATE])
-					CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterID);
+				if (LL_GetStateLimitSwitchTopAdapter())
+					CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterIDCheck);
 				else
 					CONTROL_SwitchToFault(DF_TOP_ADAPTER_OPENED);
-
-				break;
-
-			case SS_TopAdapterID:
-				LOGIC_TopAdapterIdentification();
-				CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterIDCheck);
 				break;
 
 			case SS_TopAdapterIDCheck:
-				if (DataTable[REG_ID_ADPTR_SET] == DataTable[REG_ID_TOP_ADPTR_FACTUAL])
+				LOGIC_AdapterIDMeasure(TOP_ADAPTER);
+				LOGIC_AdapterIDMatch();
+
+				if (DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
 					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterStateCheck);
 				else
 					CONTROL_SwitchToFault(DF_TOP_ADAPTER_MISMATCHED);
 				break;
 
 			case SS_BotAdapterStateCheck:
-				DataTable[REG_BOT_ADPTR_STATE] = LL_GetStateLimitSwitchBotAdapter();
-
-				if (DataTable[REG_BOT_ADPTR_STATE])
-					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterID);
+				if (LL_GetStateLimitSwitchBotAdapter())
+					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterIDCheck);
 				else
 					CONTROL_SwitchToFault(DF_BOT_ADAPTER_OPENED);
-
-			case SS_BotAdapterID:
-				LOGIC_BotAdapterIdentification();
-				CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterIDCheck);
 				break;
 
 			case SS_BotAdapterIDCheck:
-				if (DataTable[REG_ID_ADPTR_SET] == DataTable[REG_ID_BOT_ADPTR_FACTUAL])
-					CONTROL_SetDeviceState(DS_InProcess, SS_AdaptersMatchingCheck);
+				LOGIC_AdapterIDMeasure(BOT_ADAPTER);
+				LOGIC_AdapterIDMatch();
+
+				if (DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
+					CONTROL_SetDeviceState(DS_InProcess, SS_DUTPresenceCheck);
 				else
 					CONTROL_SwitchToFault(DF_BOT_ADAPTER_MISMATCHED);
 				break;
 
-			case SS_AdaptersMatchingCheck:
-				if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == DataTable[REG_ID_BOT_ADPTR_FACTUAL])
-					CONTROL_SetDeviceState(DS_InProcess, SS_DUTPresenceCheck);
-				else
-					CONTROL_SwitchToFault(DF_ADAPTERS_MISMATCHED);
+			case SS_DUTPresenceCheck:
+				LOGIC_DUTPresenceCheck();
+				CONTROL_SetDeviceState(DS_Ready, SS_None);
 				break;
 
 			default:
 				break;
 		}
 	}
-
-	if(CONTROL_State == DS_SelfTest)
-		SELFTEST_Process();
 }
 //-----------------------------------------------
 

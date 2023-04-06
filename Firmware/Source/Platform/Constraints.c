@@ -8,12 +8,12 @@
 // Constants
 //
 const TableItemConstraint Constraint[DATA_TABLE_WP_START] = {
-		{ADPTR_MIHM_MIN, ADPTR_MIHM_MAX, 0},										// 0
-		{ADPTR_MIHV_MIN, ADPTR_MIHV_MAX, 0},										// 1
-		{ADPTR_MISM_MIN, ADPTR_MISM_MAX, 0},										// 2
-		{ADPTR_MISV_MIN, ADPTR_MISV_MAX, 0},										// 3
-		{ADPTR_MIXM_MIN, ADPTR_MIXM_MAX, 0},										// 4
-		{ADPTR_MIXV_MIN, ADPTR_MIXV_MAX, 0},										// 5
+		{ADPTR_MIHM_REF_MIN, ADPTR_MIHM_REF_MAX, ADPTR_MIHM_REF_DEF},				// 0
+		{ADPTR_MIHV_REF_MIN, ADPTR_MIHV_REF_MAX, ADPTR_MIHV_REF_DEF},				// 1
+		{ADPTR_MISM_REF_MIN, ADPTR_MISM_REF_MAX, ADPTR_MISM_REF_DEF},				// 2
+		{ADPTR_MISV_REF_MIN, ADPTR_MISV_REF_MAX, ADPTR_MISV_REF_DEF},				// 3
+		{ADPTR_MIXM_REF_MIN, ADPTR_MIXM_REF_MAX, ADPTR_MIXM_REF_DEF},				// 4
+		{ADPTR_MIXV_REF_MIN, ADPTR_MIXV_REF_MAX, ADPTR_MIXV_REF_DEF},				// 5
 		{0, 0, 0},																	// 6
 		{0, 0, 0},																	// 7
 		{0, 0, 0},																	// 8
@@ -136,7 +136,7 @@ const TableItemConstraint Constraint[DATA_TABLE_WP_START] = {
 		{0, 0, 0},																	// 125
 		{0, 0, 0},																	// 126
 		{0, 0, 0},																	// 127
-		{0, 0, 0},																	// 128
+		{0, INT16U_MAX, 0},															// 128
 		{0, 0, 0},																	// 129
 		{0, 0, 0},																	// 130
 		{0, 0, 0},																	// 131
@@ -158,8 +158,8 @@ const TableItemConstraint Constraint[DATA_TABLE_WP_START] = {
 		{0, 0, 0},																	// 147
 		{0, 0, 0},																	// 148
 		{0, 0, 0},																	// 149
-		{0, 0, 0},																	// 150
-		{0, 0, 0},																	// 151
+		{0, INT16U_MAX, 0},															// 150
+		{0, INT16U_MAX, 0},															// 151
 		{0, 0, 0},																	// 152
 		{0, 0, 0},																	// 153
 		{0, 0, 0},																	// 154

@@ -31,40 +31,52 @@ void LOGIC_ResetOutputRegisters()
 //------------------------------------------
 
 //
-void LOGIC_TopAdapterIdentification()
+void LOGIC_AdapterIDMeasure(uint16_t Adapter)
 {
-	DataTable[REG_ID_TOP_ADPTR_FACTUAL] = LL_MeasureIDTop();
-
-	if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == REG_ADPTR_MIHM)
-		DataTable[REG_ID_TOP_ADPTR] = MIHM;
-	else if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == REG_ADPTR_MIHV)
-		DataTable[REG_ID_TOP_ADPTR] = MIHV;
-	else if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == REG_ADPTR_MISM)
-		DataTable[REG_ID_TOP_ADPTR] = MISM;
-	else if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == REG_ADPTR_MISV)
-		DataTable[REG_ID_TOP_ADPTR] = MISV;
-	else if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == REG_ADPTR_MIXM)
-		DataTable[REG_ID_TOP_ADPTR] = MIXM;
-	else if (DataTable[REG_ID_TOP_ADPTR_FACTUAL] == REG_ADPTR_MIXV)
-		DataTable[REG_ID_TOP_ADPTR] = MIXV;
+	if (Adapter == TOP_ADAPTER)
+		DataTable[REG_ID_ADPTR_FACTUAL] = LL_MeasureIDTop();
+	else
+		DataTable[REG_ID_ADPTR_FACTUAL] = LL_MeasureIDBot();
 }
 //------------------------------------------
 
-void LOGIC_BotAdapterIdentification()
+void LOGIC_AdapterIDMatch()
 {
-	DataTable[REG_ID_BOT_ADPTR_FACTUAL] = LL_MeasureIDBot();
+	if (DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIHM)
+		DataTable[REG_ID_ADPTR_CHECKED] = MIHM;
+	else if (DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIHV)
+		DataTable[REG_ID_ADPTR_CHECKED] = MIHV;
+	else if (DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MISM)
+		DataTable[REG_ID_ADPTR_CHECKED] = MISM;
+	else if (DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MISV)
+		DataTable[REG_ID_ADPTR_CHECKED] = MISV;
+	else if (DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIXM)
+		DataTable[REG_ID_ADPTR_CHECKED] = MIXM;
+	else if (DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIXV)
+		DataTable[REG_ID_ADPTR_CHECKED] = MIXV;
+}
+//------------------------------------------
 
-	if (DataTable[REG_ID_BOT_ADPTR_FACTUAL] == REG_ADPTR_MIHM)
-		DataTable[REG_ID_BOT_ADPTR] = MIHM;
-	else if (DataTable[REG_ID_BOT_ADPTR_FACTUAL] == REG_ADPTR_MIHV)
-		DataTable[REG_ID_BOT_ADPTR] = MIHV;
-	else if (DataTable[REG_ID_BOT_ADPTR_FACTUAL] == REG_ADPTR_MISM)
-		DataTable[REG_ID_BOT_ADPTR] = MISM;
-	else if (DataTable[REG_ID_BOT_ADPTR_FACTUAL] == REG_ADPTR_MISV)
-		DataTable[REG_ID_BOT_ADPTR] = MISV;
-	else if (DataTable[REG_ID_BOT_ADPTR_FACTUAL] == REG_ADPTR_MIXM)
-		DataTable[REG_ID_BOT_ADPTR] = MIXM;
-	else if (DataTable[REG_ID_BOT_ADPTR_FACTUAL] == REG_ADPTR_MIXV)
-		DataTable[REG_ID_BOT_ADPTR] = MIXV;
+void LOGIC_DUTPresenceCheck()
+{
+	if (LL_GetStatePresenceSensorDUT1())
+		DataTable[REF_TL_DUT_PRESENCE] = INSTALLED;
+	else
+		DataTable[REF_TL_DUT_PRESENCE] = NOT_INSTALLED;
+
+	if (LL_GetStatePresenceSensorDUT2())
+			DataTable[REF_TR_DUT_PRESENCE] = INSTALLED;
+	else
+			DataTable[REF_TR_DUT_PRESENCE] = NOT_INSTALLED;
+
+	if (LL_GetStatePresenceSensorDUT3())
+			DataTable[REF_BL_DUT_PRESENCE] = INSTALLED;
+	else
+				DataTable[REF_BL_DUT_PRESENCE] = NOT_INSTALLED;
+
+	if (LL_GetStatePresenceSensorDUT4())
+			DataTable[REF_BR_DUT_PRESENCE] = INSTALLED;
+	else
+				DataTable[REF_BR_DUT_PRESENCE] = NOT_INSTALLED;
 }
 //------------------------------------------

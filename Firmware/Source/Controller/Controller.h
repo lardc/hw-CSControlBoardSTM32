@@ -14,21 +14,18 @@ typedef enum __DeviceState
 	DS_Fault = 1,
 	DS_Disabled = 2,
 	DS_Ready = 3,
-	DS_InProcess = 4,
-	DS_SelfTest = 5
+	DS_InProcess = 4
 } DeviceState;
 
 typedef enum __DeviceSubState
 {
 	SS_None = 0,
 	SS_TopAdapterStateCheck = 1,
-	SS_TopAdapterID = 2,
-	SS_TopAdapterIDCheck = 3,
-	SS_BotAdapterStateCheck = 4,
-	SS_BotAdapterID = 5,
-	SS_BotAdapterIDCheck = 6,
-	SS_AdaptersMatchingCheck = 7,
-	SS_DUTPresenceCheck = 8
+	SS_TopAdapterIDCheck = 2,
+	SS_BotAdapterStateCheck = 3,
+	SS_BotAdapterIDCheck = 4,
+	SS_DUTPresenceCheck = 5,
+	SS_DUTPresenceCheck1 = 6
 } DeviceSubState;
 
 // Variables
