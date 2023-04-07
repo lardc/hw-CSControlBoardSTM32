@@ -113,7 +113,7 @@ float LL_MeasurePressure()
 	float MeasuredVoltagePressure;
 
 	// Measure test-point and convert value to voltage
-	MeasuredVoltagePressure = (float)ADC_Measure(ADC1, ADC_ID_PRESSURE_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
+	MeasuredVoltagePressure = (float)ADC_Measure(ADC1, ADC_PRESSURE_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
 
 	return MeasuredVoltagePressure;
 }

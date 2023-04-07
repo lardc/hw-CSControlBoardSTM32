@@ -14,13 +14,13 @@ const TableItemConstraint Constraint[DATA_TABLE_WP_START] = {
 		{ADPTR_MISV_REF_MIN, ADPTR_MISV_REF_MAX, ADPTR_MISV_REF_DEF},				// 3
 		{ADPTR_MIXM_REF_MIN, ADPTR_MIXM_REF_MAX, ADPTR_MIXM_REF_DEF},				// 4
 		{ADPTR_MIXV_REF_MIN, ADPTR_MIXV_REF_MAX, ADPTR_MIXV_REF_DEF},				// 5
-		{0, 0, 0},																	// 6
-		{0, 0, 0},																	// 7
-		{0, 0, 0},																	// 8
-		{0, 0, 0},																	// 9
-		{0, 0, 0},																	// 10
-		{0, 0, 0},																	// 11
-		{0, 0, 0},																	// 12
+		{PRESSURE_OFFSET_MIN, PRESSURE_OFFSET_MAX, PRESSURE_OFFSET_DEF},			// 6
+		{PRESSURE_K_MIN, PRESSURE_K_MAX, PRESSURE_K_DEF},							// 7
+		{PRESSURE_P2_MIN, PRESSURE_P2_MAX, PRESSURE_P2_DEF},						// 8
+		{PRESSURE_P1_MIN, PRESSURE_P1_MAX, PRESSURE_P1_DEF},						// 9
+		{PRESSURE_P0_MIN, PRESSURE_P0_MAX, PRESSURE_P0_DEF},						// 10
+		{SET_PRESSURE_VALUE_MIN, SET_PRESSURE_VALUE_MAX, SET_PRESSURE_VALUE_DEF},	// 11
+		{ALLOWED_ERROR_MIN, ALLOWED_ERROR_MAX, ALLOWED_ERROR_DEF},					// 12
 		{0, 0, 0},																	// 13
 		{0, 0, 0},																	// 14
 		{0, 0, 0},																	// 15

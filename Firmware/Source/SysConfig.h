@@ -29,6 +29,6 @@
 // ADC
 #define ADC_ID_TOP_CHANNEL				2			// Номер канала оцифровки напряжения на делителе верхнего адаптера
 #define ADC_ID_BOT_CHANNEL				3			// Номер канала оцифровки напряжения на делителе нижнего адаптера
-#define ADC_ID_PRESSURE_CHANNEL			4			// Номер канала оцифровки напряжения датчика давления
+#define ADC_PRESSURE_CHANNEL			4			// Номер канала оцифровки напряжения датчика давления
 
 #endif // __SYSCONFIG_H

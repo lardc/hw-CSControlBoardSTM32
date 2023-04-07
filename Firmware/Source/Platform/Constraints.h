@@ -31,6 +31,34 @@
 #define ADPTR_MIXV_REF_MIN			2250	// в мВ
 #define ADPTR_MIXV_REF_MAX			2750	// в мВ
 #define ADPTR_MIXV_REF_DEF			2500	// в мВ
+
+#define PRESSURE_OFFSET_MIN			1
+#define PRESSURE_OFFSET_MAX			10000
+#define PRESSURE_OFFSET_DEF			0
+
+#define PRESSURE_K_MIN				1
+#define PRESSURE_K_MAX				10000
+#define PRESSURE_K_DEF				1000
+
+#define PRESSURE_P2_MIN				1
+#define PRESSURE_P2_MAX				10000
+#define PRESSURE_P2_DEF				0
+
+#define PRESSURE_P1_MIN				1
+#define PRESSURE_P1_MAX				10000
+#define PRESSURE_P1_DEF				1000
+
+#define PRESSURE_P0_MIN				1
+#define PRESSURE_P0_MAX				10000
+#define PRESSURE_P0_DEF				0
+
+#define SET_PRESSURE_VALUE_MIN		3		// в Бар
+#define SET_PRESSURE_VALUE_MAX		7		// в Бар
+#define SET_PRESSURE_VALUE_DEF		6		// в Бар
+
+#define ALLOWED_ERROR_MIN			1		// в % / 10
+#define ALLOWED_ERROR_MAX			100		// в % / 10
+#define ALLOWED_ERROR_DEF			50		// в % / 10
 //
 #define NO							0
 #define YES							1
