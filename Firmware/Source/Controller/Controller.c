@@ -35,7 +35,7 @@ volatile Int64U CONTROL_TimeCounter = 0;
 static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError);
 void CONTROL_UpdateWatchDog();
 void CONTROL_ResetToDefaultState();
-void CONTROL_CSMPrepareLogic();
+Int16U CONTROL_CSMPrepareLogic();
 void CONTROL_ClampLogic();
 void CONTROL_HandleLEDLogic();
 void CONTROL_SamplePressureValue();
@@ -120,22 +120,20 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			DataTable[REG_WARNING] = WARNING_NONE;
 			break;
 			
-		case ACT_PREPARE_CSM:
-			if(CONTROL_State == DS_Ready)
-			{
-				CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterStateCheck);
-			}
-			else if(CONTROL_State == DS_InProcess)
-				*pUserError = ERR_OPERATION_BLOCKED;
-			else
-				*pUserError = ERR_DEVICE_NOT_READY;
-			break;
-			
 		case ACT_CLAMP_START:
 			if(CONTROL_State == DS_Ready)
 			{
-				CONTROL_SetDeviceState(DS_InProcess, SS_None);
-				CONTROL_ClampState = CS_ClampPressureCheck;
+				DataTable[REG_PROBLEM] = PROBLEM_NONE;
+				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
+
+				Int16U PrepareResult = CONTROL_CSMPrepareLogic();
+				if(PrepareResult == PROBLEM_NONE)
+					CONTROL_SetDeviceState(DS_InProcess, SS_None);
+				else
+				{
+					DataTable[REG_PROBLEM] = PrepareResult;
+					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
+				}
 			}
 			else if(CONTROL_State == DS_InProcess)
 				*pUserError = ERR_OPERATION_BLOCKED;
@@ -163,48 +161,25 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 }
 //-----------------------------------------------
 
-void CONTROL_CSMPrepareLogic()
+Int16U CONTROL_CSMPrepareLogic()
 {
-	if(CONTROL_State == DS_InProcess)
-	{
-		switch(CONTROL_SubState)
-		{
-			case SS_TopAdapterStateCheck:
-				if(LL_GetStateLimitSwitchTopAdapter())
-					CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterIDCheck);
-				else
-					CONTROL_SwitchToFault(DF_TOP_ADAPTER_OPENED);
-				break;
-				
-			case SS_TopAdapterIDCheck:
-				if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) == DataTable[REG_ID_ADPTR_SET])
-					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterStateCheck);
-				else
-					CONTROL_SwitchToFault(DF_TOP_ADAPTER_MISMATCHED);
-				break;
-				
-			case SS_BotAdapterStateCheck:
-				if(LL_GetStateLimitSwitchBotAdapter())
-					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterIDCheck);
-				else
-					CONTROL_SwitchToFault(DF_BOT_ADAPTER_OPENED);
-				break;
-				
-			case SS_BotAdapterIDCheck:
-				if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) == DataTable[REG_ID_ADPTR_SET])
-					CONTROL_SetDeviceState(DS_InProcess, SS_DUTPresenceCheck);
-				else
-					CONTROL_SwitchToFault(DF_BOT_ADAPTER_MISMATCHED);
-				break;
-				
-			case SS_DUTPresenceCheck:
-				CONTROL_SetDeviceState(DS_Ready, SS_None);
-				break;
-				
-			default:
-				break;
-		}
-	}
+	DUTType TopID = LOGIC_AdapterIDMatch(LL_MeasureIDTop());
+	DUTType BotID = LOGIC_AdapterIDMatch(LL_MeasureIDBot());
+
+	if(TopID != DataTable[REG_ID_ADPTR_SET])
+		return PROBLEM_TOP_ADAPTER_MISMATCHED;
+
+	else if(BotID != DataTable[REG_ID_ADPTR_SET])
+		return PROBLEM_BOT_ADAPTER_MISMATCHED;
+
+	else if(!LL_GetStateLimitSwitchTopAdapter())
+		return PROBLEM_TOP_ADAPTER_OPENED;
+
+	else if(!LL_GetStateLimitSwitchBotAdapter())
+		return PROBLEM_BOT_ADAPTER_OPENED;
+
+	else
+		return PROBLEM_NONE;
 }
 //-----------------------------------------------
 

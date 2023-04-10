@@ -18,9 +18,8 @@
 #define ACT_DBG_MEASURE_ID_BOT			33	// Проверка работы системы идентификации нижнего адаптера
 #define ACT_DBG_MEASURE_PRESSURE		34	// Опрос датчика давления
 
-#define ACT_PREPARE_CSM					50	// Предварительный опрос всех датчиков, идентификация адаптеров
-#define ACT_CLAMP_START					51	// Фиксация зажимного устройства
-#define ACT_CLAMP_STOP					52	// Отсоединение зажимного устройства
+#define ACT_CLAMP						102	// Фиксация зажимного устройства
+#define ACT_RELEASE						104	// Отсоединение зажимного устройства
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -89,14 +88,14 @@
 
 //  Fault and disable codes
 #define DF_NONE							0
-#define DF_TOP_ADAPTER_OPENED			1	// Верхний адаптер не задвинут до конца
-#define DF_BOT_ADAPTER_OPENED			2	// Нижний адаптер не задвинут до конца
-#define DF_TOP_ADAPTER_MISMATCHED		3	// Установленный верхний адаптер не совпадает с заданым адаптером для проведения измерений
-#define DF_BOT_ADAPTER_MISMATCHED		4	// Установленный нижний адаптер не совпадает с заданым адаптером для проведения измерений
-#define DF_PRESSURE_ERROR_EXCEED		5	// Превышение значения допустимой погрешности
+#define DF_PRESSURE_ERROR_EXCEED		1	// Превышение значения допустимой погрешности
 
 // Problem
 #define PROBLEM_NONE					0
+#define PROBLEM_TOP_ADAPTER_OPENED		1	// Верхний адаптер не задвинут до конца
+#define PROBLEM_BOT_ADAPTER_OPENED		2	// Нижний адаптер не задвинут до конца
+#define PROBLEM_TOP_ADAPTER_MISMATCHED	3	// Установленный верхний адаптер не совпадает с заданым адаптером для проведения измерений
+#define PROBLEM_BOT_ADAPTER_MISMATCHED	4	// Установленный нижний адаптер не совпадает с заданым адаптером для проведения измерений
 
 //  Warning
 #define WARNING_NONE					0

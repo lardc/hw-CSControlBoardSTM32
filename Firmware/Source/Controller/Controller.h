@@ -43,7 +43,6 @@ extern volatile DeviceState CONTROL_State;
 extern volatile DeviceSubState CONTROL_SubState;
 extern Int64U CONTROL_LEDTimeout;
 
-
 // Functions
 //
 void CONTROL_Init();
