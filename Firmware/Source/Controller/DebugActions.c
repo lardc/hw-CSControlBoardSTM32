@@ -64,34 +64,6 @@ void DBACT_ToggleSFOutput()
 }
 //-----------------------
 
-// Get state of presence sensor of DUT1
-void DBACT_GetStatePresenceSensorDUT1()
-{
-	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT1();
-}
-//-----------------------
-
-// Get state of presence sensor of DUT2
-void DBACT_GetStatePresenceSensorDUT2()
-{
-	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT2();
-}
-//-----------------------
-
-// Get state of presence sensor of DUT3
-void DBACT_GetStatePresenceSensorDUT3()
-{
-	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT3();
-}
-//-----------------------
-
-// Get state of presence sensor of DUT4
-void DBACT_GetStatePresenceSensorDUT4()
-{
-	DataTable[REG_RSLT] = LL_GetStatePresenceSensorDUT4();
-}
-//-----------------------
-
 // Get state of limit switch at the top adapter
 void DBACT_GetStateLimitSwitchTOP()
 {
