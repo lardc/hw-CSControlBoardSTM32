@@ -25,7 +25,6 @@ typedef void (*FUNC_AsyncDelegate)();
 volatile DeviceState CONTROL_State = DS_None;
 volatile DeviceSubState CONTROL_SubState = SS_None;
 static Boolean CycleActive = false;
-static float ActualPressureValue = 0;
 //
 volatile Int64U CONTROL_TimeCounter = 0;
 
@@ -177,10 +176,6 @@ Int16U CONTROL_CSMPrepareLogic()
 
 void CONTROL_ClampLogic()
 {
-	float MeasuredError = ((float)DataTable[REG_SET_PRESSURE_VALUE] - ActualPressureValue)
-			/ DataTable[REG_SET_PRESSURE_VALUE] * 100;
-	float AllowedError = (float)DataTable[REG_ALLOWED_ERROR] / 10;
-	
 	static Int64U Delay = 0;
 
 	if(CONTROL_State == DS_Clamping || CONTROL_State == DS_ClampingRelease)
@@ -250,15 +245,33 @@ void CONTROL_ClampLogic()
 
 void CONTROL_SamplePressureValue()
 {
-	ActualPressureValue = MEASURE_GetPressureValue();
-	DataTable[REG_PRESSURE_VALUE] = ActualPressureValue;
+	float Pressure = MEASURE_GetPressureValue();
+	DataTable[REG_PRESSURE_VALUE] = Pressure;
+
+	if(CONTROL_State == DS_Ready || CONTROL_State == DS_Clamping ||
+			CONTROL_State == DS_ClampingDone || CONTROL_State == DS_ClampingRelease)
+	{
+		float PressureError = fabsf(Pressure - DataTable[REG_SET_PRESSURE_VALUE]) / DataTable[REG_SET_PRESSURE_VALUE];
+		if(PressureError > DataTable[REG_ALLOWED_ERROR])
+			CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
+	}
 }
 //------------------------------------------
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {
+	LL_SetStateSFOutput(false);
+
+	LL_SetStateIndADPTR(false);
+	LL_SetStateIndCSM(false);
+
+	LL_SetStatePneumDUT(false);
+	LL_SetStatePneumTOP(false);
+	LL_SetStatePneumBOT(false);
+
 	CONTROL_SetDeviceState(DS_Fault, SS_None);
 	DataTable[REG_FAULT_REASON] = Reason;
+	DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
 }
 //------------------------------------------
 
