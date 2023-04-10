@@ -88,33 +88,18 @@ bool LL_GetStateLimitSwitchBotAdapter()
 
 float LL_MeasureIDTop()
 {
-	float MeasuredVoltageIDTop;
-
-	// Measure test-point and convert value to voltage
-	MeasuredVoltageIDTop = (float)ADC_Measure(ADC1, ADC_ID_TOP_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-
-	return MeasuredVoltageIDTop;
+	return (float)ADC_Measure(ADC1, ADC_ID_TOP_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
 }
 //-----------------------------
 
 float LL_MeasureIDBot()
 {
-	float MeasuredVoltageIDBot;
-
-	// Measure test-point and convert value to voltage
-	MeasuredVoltageIDBot = (float)ADC_Measure(ADC1, ADC_ID_BOT_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-
-	return MeasuredVoltageIDBot;
+	return (float)ADC_Measure(ADC1, ADC_ID_BOT_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
 }
 //-----------------------------
 
 float LL_MeasurePressure()
 {
-	float MeasuredVoltagePressure;
-
-	// Measure test-point and convert value to voltage
-	MeasuredVoltagePressure = (float)ADC_Measure(ADC1, ADC_PRESSURE_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
-
-	return MeasuredVoltagePressure;
+	return (float)ADC_Measure(ADC1, ADC_PRESSURE_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
 }
 //-----------------------------
