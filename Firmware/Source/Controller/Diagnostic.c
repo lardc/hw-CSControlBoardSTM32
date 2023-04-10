@@ -36,14 +36,6 @@ bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			DBACT_ToggleSFOutput();
 			break;
 			
-		case ACT_DBG_STATE_LS_TOP:
-			DBACT_GetStateLimitSwitchTOP();
-			break;
-			
-		case ACT_DBG_STATE_LS_BOT:
-			DBACT_GetStateLimitSwitchBOT();
-			break;
-			
 		case ACT_DBG_MEASURE_ID_TOP:
 			DBACT_MeasureIDDividerTop();
 			break;

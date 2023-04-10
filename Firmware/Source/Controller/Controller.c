@@ -71,7 +71,7 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	
-	LOGIC_DUTPresenceCheck();
+	LOGIC_UpdateDiscreteSensors();
 	CONTROL_HandleLEDLogic();
 	CONTROL_SamplePressureValue();
 	CONTROL_HandleSafetyOutput();
@@ -205,7 +205,6 @@ void CONTROL_CSMPrepareLogic()
 				break;
 				
 			case SS_DUTPresenceCheck:
-				LOGIC_DUTPresenceCheck();
 				CONTROL_SetDeviceState(DS_Ready, SS_None);
 				break;
 				

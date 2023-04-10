@@ -64,20 +64,6 @@ void DBACT_ToggleSFOutput()
 }
 //-----------------------
 
-// Get state of limit switch at the top adapter
-void DBACT_GetStateLimitSwitchTOP()
-{
-	DataTable[REG_RSLT] = LL_GetStateLimitSwitchTopAdapter();
-}
-//-----------------------
-
-// Get state of limit switch at the bottom adapter
-void DBACT_GetStateLimitSwitchBOT()
-{
-	DataTable[REG_RSLT] = LL_GetStateLimitSwitchBotAdapter();
-}
-//-----------------------
-
 // Measure voltage at the resistor divider on the top side of the adapter
 void DBACT_MeasureIDDividerTop()
 {

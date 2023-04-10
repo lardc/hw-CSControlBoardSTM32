@@ -55,11 +55,14 @@ void LOGIC_AdapterIDMatch()
 }
 //------------------------------------------
 
-void LOGIC_DUTPresenceCheck()
+void LOGIC_UpdateDiscreteSensors()
 {
-	DataTable[REF_TL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT1() ? INSTALLED : NOT_INSTALLED;
-	DataTable[REF_TR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT2() ? INSTALLED : NOT_INSTALLED;
-	DataTable[REF_BL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT3() ? INSTALLED : NOT_INSTALLED;
-	DataTable[REF_BR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT4() ? INSTALLED : NOT_INSTALLED;
+	DataTable[REF_TL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT1() ? YES : NO;
+	DataTable[REF_TR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT2() ? YES : NO;
+	DataTable[REF_BL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT3() ? YES : NO;
+	DataTable[REF_BR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT4() ? YES : NO;
+
+	DataTable[REG_SEN_TOP_ADAPTER] = LL_GetStateLimitSwitchTopAdapter() ? YES : NO;
+	DataTable[REG_SEN_BOT_ADAPTER] = LL_GetStateLimitSwitchBotAdapter() ? YES : NO;
 }
 //------------------------------------------

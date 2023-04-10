@@ -13,6 +13,6 @@ typedef enum __TestType
 void LOGIC_ResetOutputRegisters();
 void LOGIC_AdapterIDMeasure(uint16_t Adapter);
 void LOGIC_AdapterIDMatch();
-void LOGIC_DUTPresenceCheck();
+void LOGIC_UpdateDiscreteSensors();
 
 #endif /* LOGIC_H_ */

@@ -65,9 +65,6 @@
 //
 #define TOP_ADAPTER					0
 #define BOT_ADAPTER					1
-//
-#define NOT_INSTALLED				0
-#define INSTALLED					1
 
 // Types
 typedef struct __TableItemConstraint

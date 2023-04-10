@@ -13,8 +13,6 @@ void DBACT_TogglePneumTOP();
 void DBACT_TogglePneumBOT();
 void DBACT_TogglePneumDUT();
 void DBACT_ToggleSFOutput();
-void DBACT_GetStateLimitSwitchTOP();
-void DBACT_GetStateLimitSwitchBOT();
 void DBACT_MeasureIDDividerTop();
 void DBACT_MeasureIDDividerBot();
 void DBACT_MeasurePressure();
