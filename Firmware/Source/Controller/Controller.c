@@ -26,7 +26,6 @@ volatile DeviceState CONTROL_State = DS_None;
 volatile DeviceSubState CONTROL_SubState = SS_None;
 static Boolean CycleActive = false;
 static float ActualPressureValue = 0;
-ClampState CONTROL_ClampState = CS_None;
 //
 volatile Int64U CONTROL_TimeCounter = 0;
 
@@ -37,9 +36,7 @@ void CONTROL_UpdateWatchDog();
 void CONTROL_ResetToDefaultState();
 Int16U CONTROL_CSMPrepareLogic();
 void CONTROL_ClampLogic();
-void CONTROL_HandleLEDLogic();
 void CONTROL_SamplePressureValue();
-void CONTROL_HandleSafetyOutput();
 
 // Functions
 //
@@ -76,12 +73,7 @@ void CONTROL_Idle()
 	DEVPROFILE_ProcessRequests();
 	
 	LOGIC_UpdateSensors();
-	CONTROL_HandleLEDLogic();
 	CONTROL_SamplePressureValue();
-	CONTROL_HandleSafetyOutput();
-	
-	CONTROL_CSMPrepareLogic();
-	
 	CONTROL_ClampLogic();
 	
 	CONTROL_UpdateWatchDog();
@@ -120,7 +112,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			DataTable[REG_WARNING] = WARNING_NONE;
 			break;
 			
-		case ACT_CLAMP_START:
+		case ACT_CLAMP:
 			if(CONTROL_State == DS_Ready)
 			{
 				DataTable[REG_PROBLEM] = PROBLEM_NONE;
@@ -128,26 +120,26 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 				Int16U PrepareResult = CONTROL_CSMPrepareLogic();
 				if(PrepareResult == PROBLEM_NONE)
-					CONTROL_SetDeviceState(DS_InProcess, SS_None);
+					CONTROL_SetDeviceState(DS_Clamping, SS_BlockAdapters);
 				else
 				{
 					DataTable[REG_PROBLEM] = PrepareResult;
 					DataTable[REG_OP_RESULT] = OPRESULT_FAIL;
 				}
 			}
-			else if(CONTROL_State == DS_InProcess)
+			else if(CONTROL_State == DS_Clamping)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 			
-		case ACT_CLAMP_STOP:
-			if(CONTROL_State == DS_Ready)
+		case ACT_RELEASE:
+			if(CONTROL_State == DS_ClampingDone)
 			{
-				CONTROL_SetDeviceState(DS_InProcess, SS_None);
-				CONTROL_ClampState = CS_ClampDisengage;
+				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
+				CONTROL_SetDeviceState(DS_ClampingRelease, SS_StartRelease);
 			}
-			else if(CONTROL_State == DS_InProcess)
+			else if(CONTROL_State == DS_ClampingRelease)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
@@ -189,60 +181,70 @@ void CONTROL_ClampLogic()
 			/ DataTable[REG_SET_PRESSURE_VALUE] * 100;
 	float AllowedError = (float)DataTable[REG_ALLOWED_ERROR] / 10;
 	
-	if(CONTROL_State == DS_InProcess)
+	static Int64U Delay = 0;
+
+	if(CONTROL_State == DS_Clamping || CONTROL_State == DS_ClampingRelease)
 	{
-		switch(CONTROL_ClampState)
+		switch(CONTROL_SubState)
 		{
-			case CS_ClampPressureCheck:
-				if((fabsf(MeasuredError)) > AllowedError)
-				{
-					CONTROL_ClampState = CS_None;
-					CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
-				}
-				else
-					CONTROL_ClampState = CS_ClampEngage;
-				break;
-				
-			case CS_ClampEngage:
+			case SS_BlockAdapters:
+				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
 				LL_SetStatePneumTOP(true);
 				LL_SetStatePneumBOT(true);
-				LL_SetStatePneumDUT(true);
-				CONTROL_SetDeviceState(DS_Ready, SS_None);
+				CONTROL_SetDeviceState(DS_Clamping, SS_BlockDelay);
+				break;
+
+			case SS_BlockDelay:
+				if(CONTROL_TimeCounter > Delay)
+				{
+					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
+					LL_SetStateIndADPTR(true);
+					LL_SetStatePneumDUT(true);
+					CONTROL_SetDeviceState(DS_Clamping, SS_ClampDelay);
+				}
+				break;
+
+			case SS_ClampDelay:
+				if(CONTROL_TimeCounter > Delay)
+				{
+					LL_SetStateIndCSM(true);
+					LL_SetStateSFOutput(true);
+					DataTable[REG_OP_RESULT] = OPRESULT_OK;
+					CONTROL_SetDeviceState(DS_ClampingDone, SS_None);
+				}
+				break;
+
+			case SS_StartRelease:
+				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
+				LL_SetStateSFOutput(false);
+				LL_SetStateIndCSM(false);
+				LL_SetStatePneumDUT(false);
+				CONTROL_SetDeviceState(DS_ClampingRelease, SS_ReleaseDelay);
+				break;
+
+			case SS_ReleaseDelay:
+				if(CONTROL_TimeCounter > Delay)
+				{
+					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
+					LL_SetStatePneumTOP(false);
+					LL_SetStatePneumBOT(false);
+					CONTROL_SetDeviceState(DS_ClampingRelease, SS_UnblockDelay);
+				}
 				break;
 				
-			case CS_ClampDisengage:
-				LL_SetStatePneumTOP(false);
-				LL_SetStatePneumBOT(false);
-				LL_SetStatePneumDUT(false);
-				CONTROL_SetDeviceState(DS_Ready, SS_None);
+			case SS_UnblockDelay:
+				if(CONTROL_TimeCounter > Delay)
+				{
+					LL_SetStateIndADPTR(false);
+					DataTable[REG_OP_RESULT] = OPRESULT_OK;
+					CONTROL_SetDeviceState(DS_Ready, SS_None);
+				}
 				break;
 				
 			default:
 				break;
 		}
 	}
-}
-//-----------------------------------------------
-
-void CONTROL_HandleLEDLogic()
-{
-	if((CONTROL_State == DS_Ready) && (CONTROL_ClampState == CS_ClampEngage))
-	{
-		LL_SetStateIndCSM(true);
-		LL_SetStateIndADPTR(true);
-	}
-	else
-	{
-		LL_SetStateIndCSM(false);
-		LL_SetStateIndADPTR(false);
-	}
-}
-//-----------------------------------------------
-
-void CONTROL_HandleSafetyOutput()
-{
-	if((CONTROL_State == DS_Ready) && (CONTROL_ClampState == CS_ClampEngage))
-		LL_SetStateSFOutput(true);
 }
 //-----------------------------------------------
 
