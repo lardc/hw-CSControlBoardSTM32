@@ -36,22 +36,6 @@ bool DIAG_HandleDiagnosticAction(uint16_t ActionID, uint16_t *pUserError)
 			DBACT_ToggleSFOutput();
 			break;
 			
-		case ACT_DBG_PRESENCE_DUT1:
-			DBACT_GetStatePresenceSensorDUT1();
-			break;
-			
-		case ACT_DBG_PRESENCE_DUT2:
-			DBACT_GetStatePresenceSensorDUT2();
-			break;
-			
-		case ACT_DBG_PRESENCE_DUT3:
-			DBACT_GetStatePresenceSensorDUT3();
-			break;
-			
-		case ACT_DBG_PRESENCE_DUT4:
-			DBACT_GetStatePresenceSensorDUT4();
-			break;
-			
 		case ACT_DBG_STATE_LS_TOP:
 			DBACT_GetStateLimitSwitchTOP();
 			break;

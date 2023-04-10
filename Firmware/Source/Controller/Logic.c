@@ -57,24 +57,9 @@ void LOGIC_AdapterIDMatch()
 
 void LOGIC_DUTPresenceCheck()
 {
-	if(LL_GetStatePresenceSensorDUT1())
-		DataTable[REF_TL_DUT_PRESENCE] = INSTALLED;
-	else
-		DataTable[REF_TL_DUT_PRESENCE] = NOT_INSTALLED;
-	
-	if(LL_GetStatePresenceSensorDUT2())
-		DataTable[REF_TR_DUT_PRESENCE] = INSTALLED;
-	else
-		DataTable[REF_TR_DUT_PRESENCE] = NOT_INSTALLED;
-	
-	if(LL_GetStatePresenceSensorDUT3())
-		DataTable[REF_BL_DUT_PRESENCE] = INSTALLED;
-	else
-		DataTable[REF_BL_DUT_PRESENCE] = NOT_INSTALLED;
-	
-	if(LL_GetStatePresenceSensorDUT4())
-		DataTable[REF_BR_DUT_PRESENCE] = INSTALLED;
-	else
-		DataTable[REF_BR_DUT_PRESENCE] = NOT_INSTALLED;
+	DataTable[REF_TL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT1() ? INSTALLED : NOT_INSTALLED;
+	DataTable[REF_TR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT2() ? INSTALLED : NOT_INSTALLED;
+	DataTable[REF_BL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT3() ? INSTALLED : NOT_INSTALLED;
+	DataTable[REF_BR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT4() ? INSTALLED : NOT_INSTALLED;
 }
 //------------------------------------------

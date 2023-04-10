@@ -71,6 +71,7 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	
+	LOGIC_DUTPresenceCheck();
 	CONTROL_HandleLEDLogic();
 	CONTROL_SamplePressureValue();
 	CONTROL_HandleSafetyOutput();
