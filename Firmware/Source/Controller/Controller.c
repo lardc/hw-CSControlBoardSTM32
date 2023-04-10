@@ -53,7 +53,7 @@ void CONTROL_Init()
 	DT_SaveFirmwareInfo(CAN_NID, 0);
 	// Инициализация device profile
 	DEVPROFILE_Init(&CONTROL_DispatchAction, &CycleActive);
-
+	
 	// Сброс значений
 	DEVPROFILE_ResetControlSection();
 	CONTROL_ResetToDefaultState();
@@ -70,15 +70,15 @@ void CONTROL_ResetToDefaultState()
 void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
-
+	
 	CONTROL_HandleLEDLogic();
 	CONTROL_SamplePressureValue();
 	CONTROL_HandleSafetyOutput();
-
+	
 	CONTROL_CSMPrepareLogic();
-
+	
 	CONTROL_ClampLogic();
-
+	
 	CONTROL_UpdateWatchDog();
 }
 //------------------------------------------
@@ -87,79 +87,76 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 {
 	*pUserError = ERR_NONE;
 	
-	switch (ActionID)
+	switch(ActionID)
 	{
-	case ACT_ENABLE_POWER:
-		if(CONTROL_State == DS_None)
-		{
-			LOGIC_ResetOutputRegisters();
-			CONTROL_SetDeviceState(DS_None, SS_None);
-		}
-		else if(CONTROL_State != DS_Ready)
-			*pUserError = ERR_OPERATION_BLOCKED;
-		break;
-
-	case ACT_DISABLE_POWER:
-		if(CONTROL_State == DS_Ready)
-		{
-			CONTROL_SetDeviceState(DS_None, SS_None);
-		}
-		else if(CONTROL_State != DS_None)
+		case ACT_ENABLE_POWER:
+			if(CONTROL_State == DS_None)
+			{
+				LOGIC_ResetOutputRegisters();
+				CONTROL_SetDeviceState(DS_None, SS_None);
+			}
+			else if(CONTROL_State != DS_Ready)
 				*pUserError = ERR_OPERATION_BLOCKED;
-		break;
-
-	case ACT_CLR_FAULT:
-		if (CONTROL_State == DS_Fault)
-		{
-			CONTROL_SetDeviceState(DS_None, SS_None);
-			DataTable[REG_FAULT_REASON] = DF_NONE;
-		}
-		break;
-
-	case ACT_CLR_WARNING:
-		DataTable[REG_WARNING] = WARNING_NONE;
-		break;
-
-	case ACT_PREPARE_CSM:
-		if(CONTROL_State == DS_Ready)
-		{
-			CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterStateCheck);
-		}
-		else
-			if (CONTROL_State == DS_InProcess)
+			break;
+			
+		case ACT_DISABLE_POWER:
+			if(CONTROL_State == DS_Ready)
+			{
+				CONTROL_SetDeviceState(DS_None, SS_None);
+			}
+			else if(CONTROL_State != DS_None)
 				*pUserError = ERR_OPERATION_BLOCKED;
-			else
-				*pUserError = ERR_DEVICE_NOT_READY;
-		break;
-
-	case ACT_CLAMP_START:
-		if(CONTROL_State == DS_Ready)
-		{
-			CONTROL_SetDeviceState(DS_InProcess, SS_None);
-			CONTROL_ClampState = CS_ClampPressureCheck;
-		}
-		else
-			if (CONTROL_State == DS_InProcess)
+			break;
+			
+		case ACT_CLR_FAULT:
+			if(CONTROL_State == DS_Fault)
+			{
+				CONTROL_SetDeviceState(DS_None, SS_None);
+				DataTable[REG_FAULT_REASON] = DF_NONE;
+			}
+			break;
+			
+		case ACT_CLR_WARNING:
+			DataTable[REG_WARNING] = WARNING_NONE;
+			break;
+			
+		case ACT_PREPARE_CSM:
+			if(CONTROL_State == DS_Ready)
+			{
+				CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterStateCheck);
+			}
+			else if(CONTROL_State == DS_InProcess)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
-		break;
-
-	case ACT_CLAMP_STOP:
-		if(CONTROL_State == DS_Ready)
-		{
-			CONTROL_SetDeviceState(DS_InProcess, SS_None);
-			CONTROL_ClampState = CS_ClampDisengage;
-		}
-		else
-			if (CONTROL_State == DS_InProcess)
+			break;
+			
+		case ACT_CLAMP_START:
+			if(CONTROL_State == DS_Ready)
+			{
+				CONTROL_SetDeviceState(DS_InProcess, SS_None);
+				CONTROL_ClampState = CS_ClampPressureCheck;
+			}
+			else if(CONTROL_State == DS_InProcess)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
-		break;
-
-	default:
-		return DIAG_HandleDiagnosticAction(ActionID, pUserError);
+			break;
+			
+		case ACT_CLAMP_STOP:
+			if(CONTROL_State == DS_Ready)
+			{
+				CONTROL_SetDeviceState(DS_InProcess, SS_None);
+				CONTROL_ClampState = CS_ClampDisengage;
+			}
+			else if(CONTROL_State == DS_InProcess)
+				*pUserError = ERR_OPERATION_BLOCKED;
+			else
+				*pUserError = ERR_DEVICE_NOT_READY;
+			break;
+			
+		default:
+			return DIAG_HandleDiagnosticAction(ActionID, pUserError);
 			
 	}
 	return true;
@@ -172,47 +169,47 @@ void CONTROL_CSMPrepareLogic()
 	{
 		switch(CONTROL_SubState)
 		{
-		case SS_TopAdapterStateCheck:
-			if (LL_GetStateLimitSwitchTopAdapter())
-				CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterIDCheck);
-			else
-				CONTROL_SwitchToFault(DF_TOP_ADAPTER_OPENED);
-			break;
-
-		case SS_TopAdapterIDCheck:
-			LOGIC_AdapterIDMeasure(TOP_ADAPTER);
-			LOGIC_AdapterIDMatch();
-
-			if (DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
-				CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterStateCheck);
-			else
-				CONTROL_SwitchToFault(DF_TOP_ADAPTER_MISMATCHED);
-			break;
-
-		case SS_BotAdapterStateCheck:
-			if (LL_GetStateLimitSwitchBotAdapter())
-				CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterIDCheck);
-			else
-				CONTROL_SwitchToFault(DF_BOT_ADAPTER_OPENED);
-			break;
-
-		case SS_BotAdapterIDCheck:
-			LOGIC_AdapterIDMeasure(BOT_ADAPTER);
-			LOGIC_AdapterIDMatch();
-
-			if (DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
-				CONTROL_SetDeviceState(DS_InProcess, SS_DUTPresenceCheck);
-			else
-				CONTROL_SwitchToFault(DF_BOT_ADAPTER_MISMATCHED);
-			break;
-
-		case SS_DUTPresenceCheck:
-			LOGIC_DUTPresenceCheck();
-			CONTROL_SetDeviceState(DS_Ready, SS_None);
-			break;
-
-		default:
-			break;
+			case SS_TopAdapterStateCheck:
+				if(LL_GetStateLimitSwitchTopAdapter())
+					CONTROL_SetDeviceState(DS_InProcess, SS_TopAdapterIDCheck);
+				else
+					CONTROL_SwitchToFault(DF_TOP_ADAPTER_OPENED);
+				break;
+				
+			case SS_TopAdapterIDCheck:
+				LOGIC_AdapterIDMeasure(TOP_ADAPTER);
+				LOGIC_AdapterIDMatch();
+				
+				if(DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
+					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterStateCheck);
+				else
+					CONTROL_SwitchToFault(DF_TOP_ADAPTER_MISMATCHED);
+				break;
+				
+			case SS_BotAdapterStateCheck:
+				if(LL_GetStateLimitSwitchBotAdapter())
+					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterIDCheck);
+				else
+					CONTROL_SwitchToFault(DF_BOT_ADAPTER_OPENED);
+				break;
+				
+			case SS_BotAdapterIDCheck:
+				LOGIC_AdapterIDMeasure(BOT_ADAPTER);
+				LOGIC_AdapterIDMatch();
+				
+				if(DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
+					CONTROL_SetDeviceState(DS_InProcess, SS_DUTPresenceCheck);
+				else
+					CONTROL_SwitchToFault(DF_BOT_ADAPTER_MISMATCHED);
+				break;
+				
+			case SS_DUTPresenceCheck:
+				LOGIC_DUTPresenceCheck();
+				CONTROL_SetDeviceState(DS_Ready, SS_None);
+				break;
+				
+			default:
+				break;
 		}
 	}
 }
@@ -220,39 +217,40 @@ void CONTROL_CSMPrepareLogic()
 
 void CONTROL_ClampLogic()
 {
-	float MeasuredError = ((float)DataTable[REG_SET_PRESSURE_VALUE] - ActualPressureValue) / DataTable[REG_SET_PRESSURE_VALUE] * 100;
+	float MeasuredError = ((float)DataTable[REG_SET_PRESSURE_VALUE] - ActualPressureValue)
+			/ DataTable[REG_SET_PRESSURE_VALUE] * 100;
 	float AllowedError = (float)DataTable[REG_ALLOWED_ERROR] / 10;
-
-	if (CONTROL_State == DS_InProcess)
+	
+	if(CONTROL_State == DS_InProcess)
 	{
 		switch(CONTROL_ClampState)
 		{
-		case CS_ClampPressureCheck:
-			if ((fabsf(MeasuredError)) > AllowedError)
-			{
-				CONTROL_ClampState = CS_None;
-				CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
-			}
-			else
-				CONTROL_ClampState = CS_ClampEngage;
-			break;
-
-		case CS_ClampEngage:
-			LL_SetStatePneumTOP(true);
-			LL_SetStatePneumBOT(true);
-			LL_SetStatePneumDUT(true);
-			CONTROL_SetDeviceState(DS_Ready, SS_None);
-			break;
-
-		case CS_ClampDisengage:
-			LL_SetStatePneumTOP(false);
-			LL_SetStatePneumBOT(false);
-			LL_SetStatePneumDUT(false);
-			CONTROL_SetDeviceState(DS_Ready, SS_None);
-			break;
-
-		default:
-			break;
+			case CS_ClampPressureCheck:
+				if((fabsf(MeasuredError)) > AllowedError)
+				{
+					CONTROL_ClampState = CS_None;
+					CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
+				}
+				else
+					CONTROL_ClampState = CS_ClampEngage;
+				break;
+				
+			case CS_ClampEngage:
+				LL_SetStatePneumTOP(true);
+				LL_SetStatePneumBOT(true);
+				LL_SetStatePneumDUT(true);
+				CONTROL_SetDeviceState(DS_Ready, SS_None);
+				break;
+				
+			case CS_ClampDisengage:
+				LL_SetStatePneumTOP(false);
+				LL_SetStatePneumBOT(false);
+				LL_SetStatePneumDUT(false);
+				CONTROL_SetDeviceState(DS_Ready, SS_None);
+				break;
+				
+			default:
+				break;
 		}
 	}
 }
@@ -260,7 +258,7 @@ void CONTROL_ClampLogic()
 
 void CONTROL_HandleLEDLogic()
 {
-	if ((CONTROL_State == DS_Ready) && (CONTROL_ClampState == CS_ClampEngage))
+	if((CONTROL_State == DS_Ready) && (CONTROL_ClampState == CS_ClampEngage))
 	{
 		LL_SetStateIndCSM(true);
 		LL_SetStateIndADPTR(true);
@@ -275,7 +273,7 @@ void CONTROL_HandleLEDLogic()
 
 void CONTROL_HandleSafetyOutput()
 {
-	if ((CONTROL_State == DS_Ready) && (CONTROL_ClampState == CS_ClampEngage))
+	if((CONTROL_State == DS_Ready) && (CONTROL_ClampState == CS_ClampEngage))
 		LL_SetStateSFOutput(true);
 }
 //-----------------------------------------------
@@ -304,7 +302,7 @@ void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState)
 {
 	CONTROL_State = NewState;
 	DataTable[REG_DEV_STATE] = NewState;
-
+	
 	CONTROL_SetDeviceSubState(NewSubState);
 }
 //------------------------------------------

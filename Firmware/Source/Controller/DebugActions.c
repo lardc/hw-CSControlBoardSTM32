@@ -9,11 +9,8 @@
 #include "Controller.h"
 #include "DataTable.h"
 
-// Variables
-
 // Functions
-
-//  Send pulse to "CSM Block" indicator
+// Send pulse to "CSM Block" indicator
 void DBACT_ToggleIndCSM()
 {
 	LL_SetStateIndCSM(true);
@@ -22,7 +19,7 @@ void DBACT_ToggleIndCSM()
 }
 //-----------------------
 
-//  Send pulse to "Adapter Block" indicator
+// Send pulse to "Adapter Block" indicator
 void DBACT_ToggleIndADPTR()
 {
 	LL_SetStateIndADPTR(true);
