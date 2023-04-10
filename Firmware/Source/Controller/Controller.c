@@ -75,7 +75,7 @@ void CONTROL_Idle()
 {
 	DEVPROFILE_ProcessRequests();
 	
-	LOGIC_UpdateDiscreteSensors();
+	LOGIC_UpdateSensors();
 	CONTROL_HandleLEDLogic();
 	CONTROL_SamplePressureValue();
 	CONTROL_HandleSafetyOutput();

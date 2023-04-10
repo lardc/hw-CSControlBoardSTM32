@@ -38,7 +38,7 @@ bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg)
 }
 //------------------------------------------
 
-void LOGIC_UpdateDiscreteSensors()
+void LOGIC_UpdateSensors()
 {
 	DataTable[REF_TL_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT1() ? YES : NO;
 	DataTable[REF_TR_DUT_PRESENCE] = LL_GetStatePresenceSensorDUT2() ? YES : NO;
@@ -47,5 +47,8 @@ void LOGIC_UpdateDiscreteSensors()
 
 	DataTable[REG_SEN_TOP_ADAPTER] = LL_GetStateLimitSwitchTopAdapter() ? YES : NO;
 	DataTable[REG_SEN_BOT_ADAPTER] = LL_GetStateLimitSwitchBotAdapter() ? YES : NO;
+
+	DataTable[REG_ID_TOP_ADAPTER] = LOGIC_AdapterIDMatch(LL_MeasureIDTop());
+	DataTable[REG_ID_BOT_ADAPTER] = LOGIC_AdapterIDMatch(LL_MeasureIDBot());
 }
 //------------------------------------------
