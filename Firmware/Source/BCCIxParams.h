@@ -13,7 +13,7 @@
 
 // CAN Node ID
 //
-#define CAN_NID						0				// Node ID устройства
+#define CAN_NID						6				// Node ID устройства
 
 // Конфигурация Slave
 //

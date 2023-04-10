@@ -13,7 +13,7 @@
 
 // CAN node ID
 //
-#define CAN_NID						0
+#define CAN_NID						6
 
 // Конфигурация Slave
 //
@@ -27,7 +27,7 @@
 
 // CAN фильтр
 //
-#define CAN_SLAVE_FILTER_ID				(CAN_NID << CAN_SLAVE_NID_MPY)
-#define CAN_MASTER_FILTER_ID			(CAN_NID << CAN_MASTER_NID_MPY)
+#define CAN_SLAVE_FILTER_ID			(CAN_NID << CAN_SLAVE_NID_MPY)
+#define CAN_MASTER_FILTER_ID		(CAN_NID << CAN_MASTER_NID_MPY)
 
 #endif // __BCCI_PARAMS_H
