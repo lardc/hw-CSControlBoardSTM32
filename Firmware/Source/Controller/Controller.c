@@ -177,10 +177,7 @@ void CONTROL_CSMPrepareLogic()
 				break;
 				
 			case SS_TopAdapterIDCheck:
-				LOGIC_AdapterIDMeasure(TOP_ADAPTER);
-				LOGIC_AdapterIDMatch();
-				
-				if(DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
+				if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) == DataTable[REG_ID_ADPTR_SET])
 					CONTROL_SetDeviceState(DS_InProcess, SS_BotAdapterStateCheck);
 				else
 					CONTROL_SwitchToFault(DF_TOP_ADAPTER_MISMATCHED);
@@ -194,10 +191,7 @@ void CONTROL_CSMPrepareLogic()
 				break;
 				
 			case SS_BotAdapterIDCheck:
-				LOGIC_AdapterIDMeasure(BOT_ADAPTER);
-				LOGIC_AdapterIDMatch();
-				
-				if(DataTable[REG_ID_ADPTR_CHECKED] == DataTable[REG_ID_ADPTR_SET])
+				if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) == DataTable[REG_ID_ADPTR_SET])
 					CONTROL_SetDeviceState(DS_InProcess, SS_DUTPresenceCheck);
 				else
 					CONTROL_SwitchToFault(DF_BOT_ADAPTER_MISMATCHED);

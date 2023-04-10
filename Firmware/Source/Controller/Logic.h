@@ -2,17 +2,21 @@
 #define LOGIC_H_
 
 // Types
-typedef enum __TestType
+typedef enum __DUTType
 {
-	TT_DUT = 0,
-	TT_SelfTest
-} TestType;
+	DT_None = 0,
+	DT_MIHM,
+	DT_MIHV,
+	DT_MISM,
+	DT_MISV,
+	DT_MIXM,
+	DT_MIXV
+} DUTType;
 
 // Functions
 //
 void LOGIC_ResetOutputRegisters();
-void LOGIC_AdapterIDMeasure(uint16_t Adapter);
-void LOGIC_AdapterIDMatch();
+DUTType LOGIC_AdapterIDMatch(float IDVoltage);
 void LOGIC_UpdateDiscreteSensors();
 
 #endif /* LOGIC_H_ */

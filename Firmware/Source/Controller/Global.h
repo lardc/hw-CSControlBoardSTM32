@@ -18,12 +18,7 @@
 #define ADC_REF_VOLTAGE							3300.0f	// Опорное напряжение (в В)
 #define ADC_RESOLUTION							4095	// Разрешение АЦП
 
-// Идентификаторы приборов
-#define MIHM									1
-#define MIHV									2
-#define MISM									3
-#define MISV									4
-#define MIXM									5
-#define MIXV									6
+// Погрешность попадания в референс метки
+#define VOLTAGE_ID_MAX_ERR						0.1f	// До 10%
 
 #endif //  __GLOBAL_H

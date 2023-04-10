@@ -8,10 +8,8 @@
 #include "Controller.h"
 #include "Constraints.h"
 
-// Variables
-//
-
 // Functions prototypes
+bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg);
 
 // Functions
 //
@@ -28,30 +26,28 @@ void LOGIC_ResetOutputRegisters()
 }
 //------------------------------------------
 
-//
-void LOGIC_AdapterIDMeasure(uint16_t Adapter)
+DUTType LOGIC_AdapterIDMatch(float IDVoltage)
 {
-	if(Adapter == TOP_ADAPTER)
-		DataTable[REG_ID_ADPTR_FACTUAL] = LL_MeasureIDTop();
+	if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHM))
+		return DT_MIHM;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHV))
+		return DT_MIHV;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MISM))
+		return DT_MISM;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MISV))
+		return DT_MISV;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIXM))
+		return DT_MIXM;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIXV))
+		return DT_MIXV;
 	else
-		DataTable[REG_ID_ADPTR_FACTUAL] = LL_MeasureIDBot();
+		return DT_None;
 }
 //------------------------------------------
 
-void LOGIC_AdapterIDMatch()
+bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg)
 {
-	if(DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIHM)
-		DataTable[REG_ID_ADPTR_CHECKED] = MIHM;
-	else if(DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIHV)
-		DataTable[REG_ID_ADPTR_CHECKED] = MIHV;
-	else if(DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MISM)
-		DataTable[REG_ID_ADPTR_CHECKED] = MISM;
-	else if(DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MISV)
-		DataTable[REG_ID_ADPTR_CHECKED] = MISV;
-	else if(DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIXM)
-		DataTable[REG_ID_ADPTR_CHECKED] = MIXM;
-	else if(DataTable[REG_ID_ADPTR_FACTUAL] <= REG_ADPTR_REF_MIXV)
-		DataTable[REG_ID_ADPTR_CHECKED] = MIXV;
+	return (fabsf(IDVoltage - DataTable[ReferenceReg]) / DataTable[ReferenceReg]) < VOLTAGE_ID_MAX_ERR;
 }
 //------------------------------------------
 
