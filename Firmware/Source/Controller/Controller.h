@@ -51,6 +51,5 @@ void CONTROL_Idle();
 void CONTROL_DelayMs(uint32_t Delay);
 void CONTROL_SwitchToFault(Int16U Reason);
 void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState);
-void CONTROL_SetDeviceSubState(DeviceSubState NewSubState);
 
 #endif // __CONTROLLER_H

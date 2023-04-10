@@ -40,7 +40,6 @@ void CONTROL_ClampLogic();
 void CONTROL_HandleLEDLogic();
 void CONTROL_SamplePressureValue();
 void CONTROL_HandleSafetyOutput();
-void CONTROL_SaveTestResult();
 
 // Functions
 //
@@ -285,12 +284,6 @@ void CONTROL_SamplePressureValue()
 }
 //------------------------------------------
 
-void CONTROL_SaveTestResult()
-{
-	DataTable[REG_OP_RESULT] = OPRESULT_OK;
-}
-//-----------------------------------------------
-
 void CONTROL_SwitchToFault(Int16U Reason)
 {
 	CONTROL_SetDeviceState(DS_Fault, SS_None);
@@ -303,12 +296,6 @@ void CONTROL_SetDeviceState(DeviceState NewState, DeviceSubState NewSubState)
 	CONTROL_State = NewState;
 	DataTable[REG_DEV_STATE] = NewState;
 	
-	CONTROL_SetDeviceSubState(NewSubState);
-}
-//------------------------------------------
-
-void CONTROL_SetDeviceSubState(DeviceSubState NewSubState)
-{
 	CONTROL_SubState = NewSubState;
 	DataTable[REG_SUB_STATE] = NewSubState;
 }

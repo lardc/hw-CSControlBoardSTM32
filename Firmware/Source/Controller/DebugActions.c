@@ -67,29 +67,20 @@ void DBACT_ToggleSFOutput()
 // Measure voltage at the resistor divider on the top side of the adapter
 void DBACT_MeasureIDDividerTop()
 {
-	float MeasurementResult;
-
-	MeasurementResult = LL_MeasureIDTop();
-	DataTable[REG_RSLT] = MeasurementResult;
+	DataTable[REG_RSLT] = LL_MeasureIDTop();
 }
 //-----------------------
 
 // Measure voltage at the resistor divider on the bottom side of the adapter
 void DBACT_MeasureIDDividerBot()
 {
-	float MeasurementResult;
-
-	MeasurementResult = LL_MeasureIDBot();
-	DataTable[REG_RSLT] = MeasurementResult;
+	DataTable[REG_RSLT] = LL_MeasureIDBot();
 }
 //-----------------------
 
 // Measure voltage from the pressure sensor
 void DBACT_MeasurePressure()
 {
-	float MeasurementResult;
-
-	MeasurementResult = LL_MeasurePressure();
-	DataTable[REG_RSLT] = MeasurementResult;
+	DataTable[REG_RSLT] = LL_MeasurePressure();
 }
 //-----------------------
