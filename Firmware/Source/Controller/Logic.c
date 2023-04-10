@@ -13,19 +13,6 @@ bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg);
 
 // Functions
 //
-void LOGIC_ResetOutputRegisters()
-{
-	DataTable[REG_FAULT_REASON] = DF_NONE;
-	DataTable[REG_DISABLE_REASON] = DF_NONE;
-	DataTable[REG_WARNING] = WARNING_NONE;
-	DataTable[REG_PROBLEM] = PROBLEM_NONE;
-	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-	//
-	DEVPROFILE_ResetScopes(0);
-	DEVPROFILE_ResetEPReadState();
-}
-//------------------------------------------
-
 DUTType LOGIC_AdapterIDMatch(float IDVoltage)
 {
 	if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHM))

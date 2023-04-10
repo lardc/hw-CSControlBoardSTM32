@@ -15,7 +15,6 @@ typedef enum __DUTType
 
 // Functions
 //
-void LOGIC_ResetOutputRegisters();
 DUTType LOGIC_AdapterIDMatch(float IDVoltage);
 void LOGIC_UpdateDiscreteSensors();
 

@@ -61,7 +61,12 @@ void CONTROL_Init()
 
 void CONTROL_ResetToDefaultState()
 {
-	LOGIC_ResetOutputRegisters();
+	DataTable[REG_FAULT_REASON] = DF_NONE;
+	DataTable[REG_DISABLE_REASON] = DF_NONE;
+	DataTable[REG_WARNING] = WARNING_NONE;
+	DataTable[REG_PROBLEM] = PROBLEM_NONE;
+	DataTable[REG_OP_RESULT] = OPRESULT_NONE;
+
 	CONTROL_SetDeviceState(DS_None, SS_None);
 }
 //------------------------------------------
@@ -91,19 +96,14 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	{
 		case ACT_ENABLE_POWER:
 			if(CONTROL_State == DS_None)
-			{
-				LOGIC_ResetOutputRegisters();
 				CONTROL_SetDeviceState(DS_None, SS_None);
-			}
 			else if(CONTROL_State != DS_Ready)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 			
 		case ACT_DISABLE_POWER:
 			if(CONTROL_State == DS_Ready)
-			{
 				CONTROL_SetDeviceState(DS_None, SS_None);
-			}
 			else if(CONTROL_State != DS_None)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
