@@ -16,9 +16,6 @@
 #include "Measurement.h"
 #include "math.h"
 
-// Definitions
-//
-
 // Types
 //
 typedef void (*FUNC_AsyncDelegate)();
@@ -32,7 +29,6 @@ static float ActualPressureValue = 0;
 ClampState CONTROL_ClampState = CS_None;
 //
 volatile Int64U CONTROL_TimeCounter = 0;
-//
 
 // Forward functions
 //
@@ -232,7 +228,7 @@ void CONTROL_ClampLogic()
 		switch(CONTROL_ClampState)
 		{
 		case CS_ClampPressureCheck:
-			if ((fabs(MeasuredError)) > AllowedError)
+			if ((fabsf(MeasuredError)) > AllowedError)
 			{
 				CONTROL_ClampState = CS_None;
 				CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
