@@ -4,7 +4,7 @@
 #include "SysConfig.h"
 #include "ZwADC.h"
 
-uint16_t MEASURE_GetPressureValue()
+float MEASURE_GetPressureValue()
 {
 	float Offset, K, Pressure, P2, P1;
 	int16_t P0;

@@ -3,6 +3,6 @@
 
 #include "stdinc.h"
 
-uint16_t MEASURE_GetPressureValue();
+float MEASURE_GetPressureValue();
 
 #endif // __MEASUREMENT_H
