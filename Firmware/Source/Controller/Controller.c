@@ -87,7 +87,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	{
 		case ACT_ENABLE_POWER:
 			if(CONTROL_State == DS_None)
-				CONTROL_SetDeviceState(DS_None, SS_None);
+				CONTROL_SetDeviceState(DS_Ready, SS_None);
 			else if(CONTROL_State != DS_Ready)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
@@ -110,7 +110,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_CLR_WARNING:
 			DataTable[REG_WARNING] = WARNING_NONE;
 			break;
-			
+
 		case ACT_CLAMP:
 			if(CONTROL_State == DS_Ready)
 			{
@@ -157,17 +157,17 @@ Int16U CONTROL_CSMPrepareLogic()
 	DUTType TopID = LOGIC_AdapterIDMatch(LL_MeasureIDTop());
 	DUTType BotID = LOGIC_AdapterIDMatch(LL_MeasureIDBot());
 
-	if(TopID != DataTable[REG_ID_ADPTR_SET])
+	if(LL_GetStateLimitSwitchTopAdapter())
+		return PROBLEM_TOP_ADAPTER_OPENED;
+
+	else if(LL_GetStateLimitSwitchBotAdapter())
+		return PROBLEM_BOT_ADAPTER_OPENED;
+
+	else if(TopID != DataTable[REG_ID_ADPTR_SET])
 		return PROBLEM_TOP_ADAPTER_MISMATCHED;
 
 	else if(BotID != DataTable[REG_ID_ADPTR_SET])
 		return PROBLEM_BOT_ADAPTER_MISMATCHED;
-
-	else if(!LL_GetStateLimitSwitchTopAdapter())
-		return PROBLEM_TOP_ADAPTER_OPENED;
-
-	else if(!LL_GetStateLimitSwitchBotAdapter())
-		return PROBLEM_BOT_ADAPTER_OPENED;
 
 	else
 		return PROBLEM_NONE;
