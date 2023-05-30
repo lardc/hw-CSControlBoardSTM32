@@ -5,12 +5,12 @@
 typedef enum __DUTType
 {
 	DT_None = 0,
-	DT_MIHM,
-	DT_MIHV,
-	DT_MISM,
-	DT_MISV,
-	DT_MIXM,
-	DT_MIXV
+	DT_MIHM = 1,
+	DT_MIHV	= 2,
+	DT_MISM	= 3,
+	DT_MISV	= 4,
+	DT_MIXM	= 5,
+	DT_MIXV	= 6
 } DUTType;
 
 // Functions

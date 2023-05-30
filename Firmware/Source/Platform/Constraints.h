@@ -52,13 +52,10 @@
 #define PRESSURE_P0_MAX				10
 #define PRESSURE_P0_DEF				0
 
-#define SET_PRESSURE_VALUE_MIN		3		// в Бар
-#define SET_PRESSURE_VALUE_MAX		7		// в Бар
-#define SET_PRESSURE_VALUE_DEF		6		// в Бар
+#define SET_PRESSURE_VALUE_MIN		4		// в Бар
+#define SET_PRESSURE_VALUE_MAX		6		// в Бар
+#define SET_PRESSURE_VALUE_DEF		5		// в Бар
 
-#define ALLOWED_ERROR_MIN			1		// в % / 10
-#define ALLOWED_ERROR_MAX			100		// в % / 10
-#define ALLOWED_ERROR_DEF			50		// в % / 10
 //
 #define NO							0
 #define YES							1

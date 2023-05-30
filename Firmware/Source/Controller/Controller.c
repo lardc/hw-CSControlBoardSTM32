@@ -252,7 +252,7 @@ void CONTROL_SamplePressureValue()
 			CONTROL_State == DS_ClampingDone || CONTROL_State == DS_ClampingRelease)
 	{
 		float PressureError = fabsf(Pressure - DataTable[REG_SET_PRESSURE_VALUE]) / DataTable[REG_SET_PRESSURE_VALUE];
-		if(PressureError > DataTable[REG_ALLOWED_ERROR])
+		if(PressureError > PRESSURE_MAX_ERR)
 			CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
 	}
 }
