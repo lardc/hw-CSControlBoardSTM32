@@ -94,10 +94,10 @@
 
 // Problem
 #define PROBLEM_NONE					0
-#define PROBLEM_TOP_ADAPTER_OPENED		1	// Верхний адаптер не задвинут до конца
-#define PROBLEM_BOT_ADAPTER_OPENED		2	// Нижний адаптер не задвинут до конца
 #define PROBLEM_TOP_ADAPTER_MISMATCHED	3	// Установленный верхний адаптер не совпадает с заданым адаптером для проведения измерений
 #define PROBLEM_BOT_ADAPTER_MISMATCHED	4	// Установленный нижний адаптер не совпадает с заданым адаптером для проведения измерений
+#define PROBLEM_TOP_ADAPTER_OPENED		5	// Верхний адаптер не задвинут до конца
+#define PROBLEM_BOT_ADAPTER_OPENED		6	// Нижний адаптер не задвинут до конца
 
 //  Warning
 #define WARNING_NONE					0
