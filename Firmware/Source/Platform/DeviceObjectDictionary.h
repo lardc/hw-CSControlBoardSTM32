@@ -4,7 +4,7 @@
 // Команды
 #define ACT_CLR_FAULT					3	// Очистка всех fault
 #define ACT_CLR_WARNING					4	// Очистка всех warning
-#define ACT_CLEAR_HALT					5	// Очистка состояния halt
+#define ACT_CLR_HALT					5	// Очистка состояния halt
 //
 #define ACT_DBG_IND_CSM					20	// Проверка работы индикатора блокировки зажимного устройства
 #define ACT_DBG_IND_ADPTR				21	// Проверка работы индикатора блокировки верхнего и нижнего адаптеров
@@ -60,7 +60,7 @@
 #define REG_OP_RESULT					103	// Регистр результата операции
 #define REG_SELF_TEST_OP_RESULT			104 // Регистр результата самотестирования
 #define REG_SUB_STATE					105	// Регистр вспомогательного состояния
-//
+//REG_ID_TOP_ADAPTER
 #define REG_TL_DUT_PRESENCE				113	// Регистр присутствия прибора в 1 позиции (верхний левый)
 #define REG_TR_DUT_PRESENCE				114	// Регистр присутствия прибора в 2 позиции (верхний правый)
 #define REG_BL_DUT_PRESENCE				115 // Регистр присутствия прибора в 3 позиции (нижний левый)
@@ -94,8 +94,6 @@
 
 // Problem
 #define PROBLEM_NONE					0
-#define PROBLEM_TOP_ADAPTER_MISMATCHED	3	// Установленный верхний адаптер не совпадает с заданым адаптером для проведения измерений
-#define PROBLEM_BOT_ADAPTER_MISMATCHED	4	// Установленный нижний адаптер не совпадает с заданым адаптером для проведения измерений
 #define PROBLEM_TOP_ADAPTER_OPENED		5	// Верхний адаптер не задвинут до конца
 #define PROBLEM_BOT_ADAPTER_OPENED		6	// Нижний адаптер не задвинут до конца
 
