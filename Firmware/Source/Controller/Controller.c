@@ -85,19 +85,13 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 	
 	switch(ActionID)
 	{
-		case ACT_ENABLE_POWER:
+		case ACT_HOMING:
 			if(CONTROL_State == DS_None)
 				CONTROL_SetDeviceState(DS_Ready, SS_None);
 			else if(CONTROL_State != DS_Ready)
 				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 			
-		case ACT_DISABLE_POWER:
-			if(CONTROL_State == DS_Ready)
-				CONTROL_SetDeviceState(DS_None, SS_None);
-			else if(CONTROL_State != DS_None)
-				*pUserError = ERR_OPERATION_BLOCKED;
-			break;
 			
 		case ACT_CLR_FAULT:
 			if(CONTROL_State == DS_Fault)
@@ -109,6 +103,11 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			
 		case ACT_CLR_WARNING:
 			DataTable[REG_WARNING] = WARNING_NONE;
+			break;
+
+		case ACT_CLEAR_HALT:
+			if(CONTROL_State == DS_Halt)
+				CONTROL_SetDeviceState(DS_Ready, SS_None);
 			break;
 
 		case ACT_CLAMP:
@@ -144,6 +143,10 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
 			
+		case ACT_HALT:
+			CONTROL_Halt();
+			break;
+
 		default:
 			return DIAG_HandleDiagnosticAction(ActionID, pUserError);
 			
@@ -291,4 +294,9 @@ void CONTROL_UpdateWatchDog()
 		IWDG_Refresh();
 }
 //------------------------------------------
+void CONTROL_Halt()
+{
+	CONTROL_SetDeviceState(DS_Halt, SS_None);
+}
+// ----------------------------------------
 

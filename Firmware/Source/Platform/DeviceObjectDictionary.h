@@ -2,8 +2,6 @@
 #define __DEV_OBJ_DIC_H
 
 // Команды
-#define ACT_ENABLE_POWER				1	// Включение блока
-#define ACT_DISABLE_POWER				2	// Выключение блока
 #define ACT_CLR_FAULT					3	// Очистка всех fault
 #define ACT_CLR_WARNING					4	// Очистка всех warning
 #define ACT_CLEAR_HALT					5	// Очистка состояния halt
@@ -22,6 +20,7 @@
 #define ACT_HOMING						100 // Стартовое позиционирование
 #define ACT_CLAMP						102	// Фиксация зажимного устройства
 #define ACT_RELEASE						104	// Отсоединение зажимного устройства
+#define ACT_HALT						105	// Остановка процесса измерения
 #define ACT_CHECK_ADPTS_STATUS 			111 // Проверка статуса адаптеров
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
