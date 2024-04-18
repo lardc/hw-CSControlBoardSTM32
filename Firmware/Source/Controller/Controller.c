@@ -160,15 +160,22 @@ Int16U CONTROL_CSMPrepareLogic()
 	DUTType TopID = LOGIC_AdapterIDMatch(LL_MeasureIDTop());
 	DUTType BotID = LOGIC_AdapterIDMatch(LL_MeasureIDBot());
 
-	DataTable[REG_TOP_ADPT_MISMATCHED] = TopID == DataTable[REG_ID_ADPTR_SET];
-	DataTable[REG_BOT_ADPT_MISMATCHED] = BotID == DataTable[REG_ID_ADPTR_SET];
-
 	if(LL_GetStateLimitSwitchTopAdapter())
 		return PROBLEM_TOP_ADAPTER_OPENED;
 
 	else if(LL_GetStateLimitSwitchBotAdapter())
 		return PROBLEM_BOT_ADAPTER_OPENED;
 
+	else if(TopID != DataTable[REG_ID_ADPTR_SET])
+	{
+		DataTable[REG_TOP_ADPT_MISMATCHED] = TopID == DataTable[REG_ID_ADPTR_SET];
+		return PROBLEM_TOP_ADAPTER_MISMATCHED;
+	}
+	else if(BotID != DataTable[REG_ID_ADPTR_SET])
+	{
+		DataTable[REG_BOT_ADPT_MISMATCHED] = BotID == DataTable[REG_ID_ADPTR_SET];
+		return PROBLEM_BOT_ADAPTER_MISMATCHED;
+	}
 	else
 		return PROBLEM_NONE;
 }

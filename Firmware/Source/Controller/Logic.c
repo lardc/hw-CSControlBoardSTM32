@@ -15,12 +15,24 @@ bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg);
 //
 DUTType LOGIC_AdapterIDMatch(float IDVoltage)
 {
-	if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHM))
+	if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MCDA))
+		return DT_MCDA;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIAA))
+		return DT_MIAA;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIDA))
+		return DT_MIDA;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIFA))
+		return DT_MIFA;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHA))
+		return DT_MIHA;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHM))
 		return DT_MIHM;
 	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIHV))
 		return DT_MIHV;
 	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MISM))
 		return DT_MISM;
+	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MISM2))
+		return DT_MISM2;
 	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MISV))
 		return DT_MISV;
 	else if(LOGIC_IDVoltageInRane(IDVoltage, REG_ADPTR_REF_MIXM))
