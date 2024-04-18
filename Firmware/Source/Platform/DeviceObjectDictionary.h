@@ -6,6 +6,7 @@
 #define ACT_DISABLE_POWER				2	// Выключение блока
 #define ACT_CLR_FAULT					3	// Очистка всех fault
 #define ACT_CLR_WARNING					4	// Очистка всех warning
+#define ACT_CLEAR_HALT					5	// Очистка состояния halt
 //
 #define ACT_DBG_IND_CSM					20	// Проверка работы индикатора блокировки зажимного устройства
 #define ACT_DBG_IND_ADPTR				21	// Проверка работы индикатора блокировки верхнего и нижнего адаптеров
@@ -18,8 +19,10 @@
 #define ACT_DBG_MEASURE_ID_BOT			33	// Проверка работы системы идентификации нижнего адаптера
 #define ACT_DBG_MEASURE_PRESSURE		34	// Опрос датчика давления
 
+#define ACT_HOMING						100 // Стартовое позиционирование
 #define ACT_CLAMP						102	// Фиксация зажимного устройства
 #define ACT_RELEASE						104	// Отсоединение зажимного устройства
+#define ACT_CHECK_ADPTS_STATUS 			111 // Проверка статуса адаптеров
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
 #define ACT_RESTORE_FROM_ROM			201	// Восстановление данных из FLASH
@@ -44,34 +47,35 @@
 #define REG_PRESSURE_P0					10	// Калибровочный коэффициент P0 измерения давления
 //
 #define REG_SET_PRESSURE_VALUE			11	// Допустимый диапазон значения давления (в Бар)
-
 // Несохраняемые регистры чтения-записи
-#define REG_ID_ADPTR_SET				128	// Регистр для хранения значения идентификатора верхнего/нижнего адаптеров, установленного верхним уровнем (MCU):
+#define REG_FORCE						70  // Усилие зажатия (Совместимость)
+#define REG_ID_ADPTR_SET				71	// Регистр для хранения значения идентификатора верхнего/нижнего адаптеров, установленного верхним уровнем (MCU):
 											// (1 - MIHM, 2 - MIHV, 3 - MISM, 4 - MISV, 5 - MIXM, 6 - MIXV)
-
+#define REG_TEMP_SET 					72	// Выставление температуры (Совместимость)
+//
+#define REG_DEV_STATE					96	// Регистр состояния
+#define REG_FAULT_REASON				97	// Регистр Fault
+#define REG_DISABLE_REASON				98	// Регистр Disable
+#define REG_WARNING						99	// Регистр Warning
+#define REG_PROBLEM						100	// Регистр Problem
+#define REG_OP_RESULT					103	// Регистр результата операции
+#define REG_SELF_TEST_OP_RESULT			104 // Регистр результата самотестирования
+#define REG_SUB_STATE					105	// Регистр вспомогательного состояния
+//
+#define REG_TL_DUT_PRESENCE				113	// Регистр присутствия прибора в 1 позиции (верхний левый)
+#define REG_TR_DUT_PRESENCE				114	// Регистр присутствия прибора в 2 позиции (верхний правый)
+#define REG_BL_DUT_PRESENCE				115 // Регистр присутствия прибора в 3 позиции (нижний левый)
+#define REG_BR_DUT_PRESENCE				116 // Регистр присутствия прибора в 4 позиции (нижний правый)
+#define REG_TOP_ADPT_MISMATCHED 		117	// Регистр соответствия верхнего адаптера
+#define REG_BOT_ADPT_MISMATCHED 		118 // Регистр соответствия нижнего адаптера
+#define REG_PRESSURE_VALUE				119 // Регистр текущего значения датчика давления
+#define REG_SEN_TOP_ADAPTER				120 // Регистр состояния верхнего адаптера (открыт/закрыт)
+#define REG_SEN_BOT_ADAPTER				121 // Регистр состояния верхнего адаптера (открыт/закрыт)
+//
 #define REG_DBG							150	// Отладочный регистр
 #define REG_RSLT						151	// Отладочный регистр для хранения результатов измерений датчиков
 
 // Регистры только чтение
-#define REG_DEV_STATE					192	// Регистр состояния
-#define REG_FAULT_REASON				193	// Регистр Fault
-#define REG_DISABLE_REASON				194	// Регистр Disable
-#define REG_WARNING						195	// Регистр Warning
-#define REG_PROBLEM						196	// Регистр Problem
-#define REG_OP_RESULT					197	// Регистр результата операции
-#define REG_SELF_TEST_OP_RESULT			198 // Регистр результата самотестирования
-#define REG_SUB_STATE					199	// Регистр вспомогательного состояния
-
-#define REG_ID_TOP_ADAPTER				200	// Регистр для хранения значения идентифицированного прибора (верхний адаптер)
-#define REG_ID_BOT_ADAPTER				201	// Регистр для хранения значения идентифицированного прибора (нижний адаптер)
-#define REF_TL_DUT_PRESENCE				202	// Регистр наличия верхнего левого (TOP LEFT) измеряемого прибора: 0 - прибор отсутсвует, 1 -прибор установлен
-#define REF_TR_DUT_PRESENCE				203	// Регистр наличия верхнего правого (TOP RIGHT) измеряемого прибора: 0 - прибор отсутсвует, 1 -прибор установлен
-#define REF_BL_DUT_PRESENCE				204	// Регистр наличия нижнего левого (BOT LEFT) измеряемого прибора: 0 - прибор отсутсвует, 1 -прибор установлен
-#define REF_BR_DUT_PRESENCE				205	// Регистр наличия нижнего правого (BOT RIGHT) измеряемого прибора: 0 - прибор отсутсвует, 1 -прибор установлен
-#define REG_PRESSURE_VALUE				206 // Регистр для хранения текущего значения давления
-#define REG_SEN_TOP_ADAPTER				207	// Датчик положения верхнего адаптера
-#define REG_SEN_BOT_ADAPTER				208	// Датчик положения нижнего адаптера
-
 // -----------------------------
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
