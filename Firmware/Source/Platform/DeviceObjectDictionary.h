@@ -56,7 +56,8 @@
 // Несохраняемые регистры чтения-записи
 #define REG_FORCE						70  // Усилие зажатия (Совместимость)
 #define REG_ID_ADPTR_SET				71	// Регистр для хранения значения идентификатора верхнего/нижнего адаптеров, установленного верхним уровнем (MCU):
-											// (1 - MIHM, 2 - MIHV, 3 - MISM, 4 - MISV, 5 - MIXM, 6 - MIXV)
+											// (1 - MCDA, 2 - MIAA, 3 - MIDA, 4 - MIFA, 5 - MIHA, 6 - MIHM,
+											//	7 - MIHV, 8 - MISM, 9 - MISM2, 10 - MISV, 11 - MIXM, 12 - MIXV)
 #define REG_TEMP_SET 					72	// Выставление температуры (Совместимость)
 //
 #define REG_DEV_STATE					96	// Регистр состояния
@@ -66,7 +67,7 @@
 #define REG_PROBLEM						100	// Регистр Problem
 #define REG_OP_RESULT					103	// Регистр результата операции
 #define REG_SELF_TEST_OP_RESULT			104 // Регистр результата самотестирования
-#define REG_SUB_STATE					105	// Регистр вспомогательного состояния
+#define REG_SUB_STATE					110	// Регистр вспомогательного состояния
 //REG_ID_TOP_ADAPTER
 #define REG_TL_DUT_PRESENCE				113	// Регистр присутствия прибора в 1 позиции (верхний левый)
 #define REG_TR_DUT_PRESENCE				114	// Регистр присутствия прибора в 2 позиции (верхний правый)
