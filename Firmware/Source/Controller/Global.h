@@ -23,6 +23,6 @@
 #define VOLTAGE_ID_MAX_ERR						0.1f	// До 10%
 
 // Погрешность попадания в диапазон допустимого давления
-#define PRESSURE_MAX_ERR						0.2f	// Диапазон рабочего давления - от 4 до 6 бар
+#define PRESSURE_MAX_ERR						0.25f	// Диапазон рабочего давления - от 4 до 6 бар
 
 #endif //  __GLOBAL_H
