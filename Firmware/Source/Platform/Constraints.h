@@ -8,53 +8,20 @@
 
 //Definitions
 //
-#define ADPTR_MCDA_REF_MIN			1		// в мВ
-#define ADPTR_MCDA_REF_MAX			3000	// в мВ
+#define ADPTR_REF_MIN				1		// в мВ
+#define ADPTR_REF_MAX				3000	// в мВ
 
 #define ADPTR_MCDA_REF_DEF			2400	// в мВ
-
-#define ADPTR_MIAA_REF_MIN			1		// в мВ
-#define ADPTR_MIAA_REF_MAX			3000	// в мВ
 #define ADPTR_MIAA_REF_DEF			2035	// в мВ
-
-#define ADPTR_MIDA_REF_MIN			1		// в мВ
-#define ADPTR_MIDA_REF_MAX			3000	// в мВ
 #define ADPTR_MIDA_REF_DEF			2750	// в мВ
-
-#define ADPTR_MIFA_REF_MIN			1		// в мВ
-#define ADPTR_MIFA_REF_MAX			3000	// в мВ
 #define ADPTR_MIFA_REF_DEF			29		// в мВ
-
-#define ADPTR_MIHA_REF_MIN			1		// в мВ
-#define ADPTR_MIHA_REF_MAX			3000	// в мВ
 #define ADPTR_MIHA_REF_DEF			1140	// в мВ
-
-#define ADPTR_MIHM_REF_MIN			1		// в мВ
-#define ADPTR_MIHM_REF_MAX			3000	// в мВ
 #define ADPTR_MIHM_REF_DEF			63		// в мВ
-
-#define ADPTR_MIHV_REF_MIN			1		// в мВ
-#define ADPTR_MIHV_REF_MAX			3000	// в мВ
 #define ADPTR_MIHV_REF_DEF			137		// в мВ
-
-#define ADPTR_MISM_REF_MIN			1		// в мВ
-#define ADPTR_MISM_REF_MAX			3000	// в мВ
 #define ADPTR_MISM_REF_DEF			286		// в мВ
-
-#define ADPTR_MISM2_REF_MIN			1		// в мВ
-#define ADPTR_MISM2_REF_MAX			3000	// в мВ
 #define ADPTR_MISM2_REF_DEF			567		// в мВ
-
-#define ADPTR_MISV_REF_MIN			1		// в мВ
-#define ADPTR_MISV_REF_MAX			3000	// в мВ
 #define ADPTR_MISV_REF_DEF			440		// в мВ
-
-#define ADPTR_MIXM_REF_MIN			1		// в мВ
-#define ADPTR_MIXM_REF_MAX			3000	// в мВ
 #define ADPTR_MIXM_REF_DEF			810		// в мВ
-
-#define ADPTR_MIXV_REF_MIN			1		// в мВ
-#define ADPTR_MIXV_REF_MAX			3000	// в мВ
 #define ADPTR_MIXV_REF_DEF			1374	// в мВ
 
 #define PRESSURE_OFFSET_MIN			0.001
