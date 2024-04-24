@@ -22,7 +22,7 @@
 
 #define ADPTR_MIFA_REF_MIN			1		// в мВ
 #define ADPTR_MIFA_REF_MAX			3000	// в мВ
-#define ADPTR_MIFA_REF_DEF			1		// в мВ
+#define ADPTR_MIFA_REF_DEF			43		// в мВ
 
 #define ADPTR_MIHA_REF_MIN			1		// в мВ
 #define ADPTR_MIHA_REF_MAX			3000	// в мВ
@@ -80,6 +80,8 @@
 #define SET_PRESSURE_VALUE_MAX		6		// в Бар
 #define SET_PRESSURE_VALUE_DEF		5		// в Бар
 
+#define PRESS_COUNTER_MAX			10
+#define	PRESS_COUNTER_DEF			3
 //
 #define NO							0
 #define YES							1

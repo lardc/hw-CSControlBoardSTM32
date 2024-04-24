@@ -25,6 +25,7 @@ typedef void (*FUNC_AsyncDelegate)();
 volatile DeviceState CONTROL_State = DS_None;
 volatile DeviceSubState CONTROL_SubState = SS_None;
 static Boolean CycleActive = false;
+static Int16U CounterErrPress, CounterMaxErrPress;
 //
 volatile Int64U CONTROL_TimeCounter = 0;
 
@@ -254,12 +255,18 @@ void CONTROL_SamplePressureValue()
 {
 	float Pressure = MEASURE_GetPressureValue();
 	DataTable[REG_PRESSURE_VALUE] = Pressure;
+	CounterMaxErrPress = DataTable[REG_COUNTER_MAX_ERR_PRESS];
 
 	if(CONTROL_State == DS_Ready || CONTROL_State == DS_Clamping ||
 			CONTROL_State == DS_ClampingDone || CONTROL_State == DS_ClampingRelease)
 	{
 		float PressureError = fabsf(Pressure - DataTable[REG_SET_PRESSURE_VALUE]) / DataTable[REG_SET_PRESSURE_VALUE];
 		if(PressureError > PRESSURE_MAX_ERR)
+			CounterErrPress++;
+		else
+			CounterErrPress = 0;
+
+		if(CounterErrPress > CounterMaxErrPress)
 			CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
 	}
 }
