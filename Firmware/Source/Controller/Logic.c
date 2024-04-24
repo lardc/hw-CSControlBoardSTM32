@@ -46,7 +46,8 @@ DUTType LOGIC_AdapterIDMatch(float IDVoltage)
 
 bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg)
 {
-	return (fabsf(IDVoltage - DataTable[ReferenceReg]) / DataTable[ReferenceReg]) < VOLTAGE_ID_MAX_ERR;
+	return(fabsf(IDVoltage - DataTable[ReferenceReg])) < VOLTAGE_ID_ABSOLUTE_MAX_ERR ||
+			(fabsf(IDVoltage - DataTable[ReferenceReg]) / DataTable[ReferenceReg]) < VOLTAGE_ID_RELATIVE_MAX_ERR;
 }
 //------------------------------------------
 

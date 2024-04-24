@@ -20,9 +20,10 @@
 #define ADC_RESOLUTION							4095	// Разрешение АЦП
 
 // Погрешность попадания в референс метки
-#define VOLTAGE_ID_MAX_ERR						0.1f	// До 10%
+#define VOLTAGE_ID_ABSOLUTE_MAX_ERR						10		// Абсолютная погрешность определения адаптера (10мВ)
+#define VOLTAGE_ID_RELATIVE_MAX_ERR						0.1f	// Отностительная погрешность определения адаптера (10%)
 
 // Погрешность попадания в диапазон допустимого давления
-#define PRESSURE_MAX_ERR						0.25f	// Диапазон рабочего давления - от 4 до 6 бар
+#define PRESSURE_MAX_ERR						0.2f	// Диапазон рабочего давления - от 4 до 6 бар
 
 #endif //  __GLOBAL_H
