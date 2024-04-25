@@ -36,7 +36,7 @@ GPIO_PortPinSettingMacro GPIO_ADPTR_BOT			= {GPIOB, Pin_4};
 // Определения для аналоговых портов
 GPIO_PortPinSettingMacro GPIO_MEASURE_BOT 		= {GPIOA, Pin_1};
 GPIO_PortPinSettingMacro GPIO_MEASURE_TOP 		= {GPIOA, Pin_2};
-GPIO_PortPinSettingMacro GPIO_MEASURE_PRESS		= {GPIOA, Pin_3};
+GPIO_PortPinSettingMacro GPIO_MEASURE_PRESS		= {GPIOA, Pin_4};
 
 // Определения для портов альтернативных функций
 GPIO_PortPinSettingMacro GPIO_ALT_UART1_TX		= {GPIOA, Pin_9};
