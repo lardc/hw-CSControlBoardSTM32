@@ -35,6 +35,11 @@ void INITCFG_ConfigIO()
 	GPIO_InitInput(GPIO_ADPTR_TOP, NoPull);
 	GPIO_InitInput(GPIO_ADPTR_BOT, NoPull);
 
+	// Аналоговые входы
+	GPIO_InitAnalog(GPIO_MEASURE_BOT);
+	GPIO_InitAnalog(GPIO_MEASURE_TOP);
+	GPIO_InitAnalog(GPIO_MEASURE_PRESS);
+
 	// Начальная установка состояний выводов
 	GPIO_SetState(GPIO_LED, false);
 	GPIO_SetState(GPIO_IND_CSM, false);
