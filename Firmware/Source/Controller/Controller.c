@@ -253,21 +253,28 @@ void CONTROL_ClampLogic()
 
 void CONTROL_SamplePressureValue()
 {
-	float Pressure = MEASURE_GetPressureValue();
-	DataTable[REG_PRESSURE_VALUE] = Pressure;
-	CounterMaxErrPress = DataTable[REG_COUNTER_MAX_ERR_PRESS];
+	static Int64U NextSampleTime = 0;
 
-	if(CONTROL_State == DS_Ready || CONTROL_State == DS_Clamping ||
-			CONTROL_State == DS_ClampingDone || CONTROL_State == DS_ClampingRelease)
+	if(CONTROL_TimeCounter > NextSampleTime)
 	{
-		float PressureError = fabsf(Pressure - DataTable[REG_SET_PRESSURE_VALUE]) / DataTable[REG_SET_PRESSURE_VALUE];
-		if(PressureError > PRESSURE_MAX_ERR)
-			CounterErrPress++;
-		else
-			CounterErrPress = 0;
+		NextSampleTime = PRESSURE_SAMPLE_PERIOD + CONTROL_TimeCounter;
 
-		if(CounterErrPress > CounterMaxErrPress)
-			CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
+		float Pressure = MEASURE_GetPressureValue();
+		DataTable[REG_PRESSURE_VALUE] = Pressure;
+		CounterMaxErrPress = DataTable[REG_COUNTER_MAX_ERR_PRESS];
+
+		if(CONTROL_State == DS_Ready || CONTROL_State == DS_Clamping ||
+				CONTROL_State == DS_ClampingDone || CONTROL_State == DS_ClampingRelease)
+		{
+			float PressureError = fabsf(Pressure - DataTable[REG_SET_PRESSURE_VALUE]) / DataTable[REG_SET_PRESSURE_VALUE];
+			if(PressureError > PRESSURE_MAX_ERR)
+				CounterErrPress++;
+			else
+				CounterErrPress = 0;
+
+			if(CounterErrPress > CounterMaxErrPress)
+				CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
+		}
 	}
 }
 //------------------------------------------
