@@ -60,8 +60,5 @@ void LOGIC_UpdateSensors()
 
 	DataTable[REG_SEN_TOP_ADAPTER] = LL_GetStateLimitSwitchTopAdapter() ? YES : NO;
 	DataTable[REG_SEN_BOT_ADAPTER] = LL_GetStateLimitSwitchBotAdapter() ? YES : NO;
-
-	DataTable[REG_TOP_ADPT_MISMATCHED] = LOGIC_AdapterIDMatch(LL_MeasureIDTop());
-	DataTable[REG_BOT_ADPT_MISMATCHED] = LOGIC_AdapterIDMatch(LL_MeasureIDBot());
 }
 //------------------------------------------

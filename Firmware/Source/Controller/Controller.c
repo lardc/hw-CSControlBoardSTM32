@@ -143,9 +143,23 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			else
 				*pUserError = ERR_DEVICE_NOT_READY;
 			break;
-			
+
 		case ACT_HALT:
 			CONTROL_Halt();
+			break;
+
+		case ACT_CHECK_ADPTS_STATUS:
+
+			if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) != DataTable[REG_ID_ADPTR_SET])
+				DataTable[REG_TOP_ADPT_MISMATCHED] = 1;
+			else
+				DataTable[REG_TOP_ADPT_MISMATCHED] = 0;
+
+			if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) != DataTable[REG_ID_ADPTR_SET])
+				DataTable[REG_BOT_ADPT_MISMATCHED] = 1;
+			else
+				DataTable[REG_BOT_ADPT_MISMATCHED] = 0;
+
 			break;
 
 		default:
@@ -168,15 +182,11 @@ Int16U CONTROL_CSMPrepareLogic()
 		return PROBLEM_BOT_ADAPTER_OPENED;
 
 	else if(TopID != DataTable[REG_ID_ADPTR_SET])
-	{
-		DataTable[REG_TOP_ADPT_MISMATCHED] = TopID == DataTable[REG_ID_ADPTR_SET];
 		return PROBLEM_TOP_ADAPTER_MISMATCHED;
-	}
+
 	else if(BotID != DataTable[REG_ID_ADPTR_SET])
-	{
-		DataTable[REG_BOT_ADPT_MISMATCHED] = BotID == DataTable[REG_ID_ADPTR_SET];
 		return PROBLEM_BOT_ADAPTER_MISMATCHED;
-	}
+
 	else
 		return PROBLEM_NONE;
 }

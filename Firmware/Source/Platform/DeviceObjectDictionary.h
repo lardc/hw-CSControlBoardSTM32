@@ -41,7 +41,7 @@
 #define REG_SET_PRESSURE_VALUE			11	// Допустимый диапазон значения давления (в Бар)
 #define REG_COUNTER_MAX_ERR_PRESS		12	// Максимальное количество срабатываний ошибки давления
 
-#define REG_ADPTR_REF_MCDA				39	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MCDA
+
 #define REG_ADPTR_REF_MIAA				40	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIAA
 #define REG_ADPTR_REF_MIDA				41	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIDA
 #define REG_ADPTR_REF_MIFA				42	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIFA
@@ -49,18 +49,20 @@
 #define REG_ADPTR_REF_MIHM				44	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIHM
 #define REG_ADPTR_REF_MIHV				45	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIHV
 #define REG_ADPTR_REF_MISM				46	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MISM
-#define REG_ADPTR_REF_MISM2				47	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MISM2
 #define REG_ADPTR_REF_MISV				49	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MISV
 #define REG_ADPTR_REF_MIXM				50	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIXM
 #define REG_ADPTR_REF_MIXV				51	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MIXV
+#define REG_ADPTR_REF_MISM2				54	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MISM2
+#define REG_ADPTR_REF_MCDA				55	// Регистр для хранения эталонного значения напряжения (в мВ) адаптера MCDA
 
 // Несохраняемые регистры чтения-записи
 #define REG_FORCE						70  // Усилие зажатия (Совместимость)
 #define REG_ID_ADPTR_SET				71	// Регистр для хранения значения идентификатора верхнего/нижнего адаптеров, установленного верхним уровнем (MCU):
-											// (1 - MCDA, 2 - MIAA, 3 - MIDA, 4 - MIFA, 5 - MIHA, 6 - MIHM,
-											//	7 - MIHV, 8 - MISM, 9 - MISM2, 10 - MISV, 11 - MIXM, 12 - MIXV)
+											// (2001 - MIAA, 2002 - MIDA, 2003 - MIFA, 2004 - MIHA, 2005 - MIHM, 2006 - MIHV,
+											//	2007 - MISM, 2008 - MISV, 2009 - MIXM, 2010 - MIXV, 2011 - MCDA, 2013 - MISM2)
 #define REG_TEMP_SET 					72	// Выставление температуры (Совместимость)
-//
+// Регистры только чтение
+// -----------------------------
 #define REG_DEV_STATE					96	// Регистр состояния
 #define REG_FAULT_REASON				97	// Регистр Fault
 #define REG_DISABLE_REASON				98	// Регистр Disable
@@ -70,21 +72,20 @@
 #define REG_SELF_TEST_OP_RESULT			104 // Регистр результата самотестирования
 #define REG_SUB_STATE					110	// Регистр вспомогательного состояния
 //REG_ID_TOP_ADAPTER
-#define REG_TL_DUT_PRESENCE				113	// Регистр присутствия прибора в 1 позиции (верхний левый)
-#define REG_TR_DUT_PRESENCE				114	// Регистр присутствия прибора в 2 позиции (верхний правый)
-#define REG_BL_DUT_PRESENCE				115 // Регистр присутствия прибора в 3 позиции (нижний левый)
-#define REG_BR_DUT_PRESENCE				116 // Регистр присутствия прибора в 4 позиции (нижний правый)
-#define REG_TOP_ADPT_MISMATCHED 		117	// Регистр соответствия верхнего адаптера
-#define REG_BOT_ADPT_MISMATCHED 		118 // Регистр соответствия нижнего адаптера
+#define REG_TOP_ADPT_MISMATCHED 		117	// Регистр соответствия верхнего адаптера 0/1 не тот
+#define REG_BOT_ADPT_MISMATCHED 		118 // Регистр соответствия нижнего адаптера 0/1 не тот
 #define REG_PRESSURE_VALUE				119 // Регистр текущего значения датчика давления
 #define REG_SEN_TOP_ADAPTER				120 // Регистр состояния верхнего адаптера (открыт/закрыт)
 #define REG_SEN_BOT_ADAPTER				121 // Регистр состояния верхнего адаптера (открыт/закрыт)
 //
 #define REG_DBG							150	// Отладочный регистр
 #define REG_RSLT						151	// Отладочный регистр для хранения результатов измерений датчиков
-
-// Регистры только чтение
-// -----------------------------
+//
+#define REG_TL_DUT_PRESENCE				202	// Регистр присутствия прибора в 1 позиции (верхний левый)
+#define REG_TR_DUT_PRESENCE				203	// Регистр присутствия прибора в 2 позиции (верхний правый)
+#define REG_BL_DUT_PRESENCE				204 // Регистр присутствия прибора в 3 позиции (нижний левый)
+#define REG_BR_DUT_PRESENCE				205 // Регистр присутствия прибора в 4 позиции (нижний правый)
+//
 #define REG_FWINFO_SLAVE_NID			256	// Device CAN slave node ID
 #define REG_FWINFO_MASTER_NID			257	// Device CAN master node ID (if presented)
 // 258 - 259
