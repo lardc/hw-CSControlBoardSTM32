@@ -16,7 +16,7 @@
 #define ADPTR_MIDA_REF_DEF			2750	// в мВ
 #define ADPTR_MIFA_REF_DEF			29		// в мВ
 #define ADPTR_MIHA_REF_DEF			1140	// в мВ
-#define ADPTR_MIHM_REF_DEF			63		// в мВ
+#define ADPTR_MIHM_REF_DEF			70		// в мВ
 #define ADPTR_MIHV_REF_DEF			137		// в мВ
 #define ADPTR_MISM_REF_DEF			286		// в мВ
 #define ADPTR_MISM2_REF_DEF			567		// в мВ
