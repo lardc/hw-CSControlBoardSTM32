@@ -14,13 +14,13 @@ void LL_ToggleBoardLED()
 }
 //-----------------------------
 
-void LL_SetStateIndCSM(bool State)
+void LL_IndicateBlockCSM(bool State)
 {
 	GPIO_SetState(GPIO_IND_CSM, State);
 }
 //-----------------------------
 
-void LL_SetStateIndADPTR(bool State)
+void LL_IndicateBlockAdapter(bool State)
 {
 	GPIO_SetState(GPIO_IND_ADPTR, State);
 }
@@ -32,19 +32,19 @@ void LL_HoldTopAdapter(bool State)
 }
 //-----------------------------
 
-void LL_SetStatePneumBOT(bool State)
+void LL_HoldBotAdapter(bool State)
 {
 	GPIO_SetState(GPIO_PNEUM_BOT, State);
 }
 //-----------------------------
 
-void LL_SetStatePneumDUT(bool State)
+void LL_ClampDUT(bool State)
 {
 	GPIO_SetState(GPIO_PNEUM_DUT, State);
 }
 //-----------------------------
 
-void LL_SetStateSFOutput(bool State)
+void LL_SetSafetyOutput(bool State)
 {
 	GPIO_SetState(GPIO_SF_OUT, State);
 }
