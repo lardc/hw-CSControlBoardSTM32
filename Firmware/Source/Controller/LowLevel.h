@@ -11,8 +11,7 @@
 void LL_ToggleBoardLED();
 void LL_SetStateIndCSM(bool State);
 void LL_SetStateIndADPTR(bool State);
-void LL_SetStatePneumTOP(bool State);
-void LL_SetStatePneumTOP(bool State);
+void LL_HoldTopAdapter(bool State);
 void LL_SetStatePneumBOT(bool State);
 void LL_SetStatePneumDUT(bool State);
 void LL_SetStateSFOutput(bool State);

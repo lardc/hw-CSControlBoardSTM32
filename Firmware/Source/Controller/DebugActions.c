@@ -31,9 +31,9 @@ void DBACT_ToggleIndADPTR()
 // Send pulse to Top adapter blocking pneumatic cylinder
 void DBACT_TogglePneumTOP()
 {
-	LL_SetStatePneumTOP(true);
+	LL_HoldTopAdapter(true);
 	DELAY_MS(1000);
-	LL_SetStatePneumTOP(false);
+	LL_HoldTopAdapter(false);
 }
 //-----------------------
 

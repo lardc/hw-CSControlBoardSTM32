@@ -26,7 +26,7 @@ void LL_SetStateIndADPTR(bool State)
 }
 //-----------------------------
 
-void LL_SetStatePneumTOP(bool State)
+void LL_HoldTopAdapter(bool State)
 {
 	GPIO_SetState(GPIO_PNEUM_TOP, State);
 }

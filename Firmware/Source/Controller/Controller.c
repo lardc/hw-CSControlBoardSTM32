@@ -107,12 +107,12 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_CLR_HALT:
-					if(CONTROL_State == DS_Halt)
-					{
-						DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-						CONTROL_SetDeviceState(DS_ClampingRelease, SS_StartRelease);
-					}
-					break;
+			if(CONTROL_State == DS_Halt)
+			{
+				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
+				CONTROL_SetDeviceState(DS_ClampingRelease, SS_StartRelease);
+			}
+			break;
 
 		case ACT_CLAMP:
 			if(CONTROL_State == DS_Ready)
@@ -152,7 +152,6 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_CHECK_ADPTS_STATUS:
-
 			if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) != DataTable[REG_ID_ADPTR_SET])
 				DataTable[REG_TOP_ADPT_MISMATCHED] = 1;
 			else
@@ -162,7 +161,21 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 				DataTable[REG_BOT_ADPT_MISMATCHED] = 1;
 			else
 				DataTable[REG_BOT_ADPT_MISMATCHED] = 0;
+			break;
 
+		case ACT_RELEASE_ADAPTER:
+			LL_HoldTopAdapter(false);
+			DELAY_US(PNEUMO_DELAY);
+			break;
+
+		case ACT_HOLD_ADAPTER:
+			if(CONTROL_State == DS_Ready)
+			{
+				LL_HoldTopAdapter(true);
+				DELAY_US(PNEUMO_DELAY);
+			}
+			else
+				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 
 		default:
@@ -205,7 +218,7 @@ void CONTROL_ClampLogic()
 		{
 			case SS_BlockAdapters:
 				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-				LL_SetStatePneumTOP(true);
+				LL_HoldTopAdapter(true);
 				LL_SetStatePneumBOT(true);
 				CONTROL_SetDeviceState(DS_Clamping, SS_BlockDelay);
 				break;
@@ -242,7 +255,6 @@ void CONTROL_ClampLogic()
 				if(CONTROL_TimeCounter > Delay)
 				{
 					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-					LL_SetStatePneumTOP(false);
 					LL_SetStatePneumBOT(false);
 					CONTROL_SetDeviceState(DS_ClampingRelease, SS_UnblockDelay);
 				}
@@ -300,7 +312,7 @@ void CONTROL_SwitchToFault(Int16U Reason)
 	LL_SetStateIndCSM(false);
 
 	LL_SetStatePneumDUT(false);
-	LL_SetStatePneumTOP(false);
+	LL_HoldTopAdapter(false);
 	LL_SetStatePneumBOT(false);
 
 	CONTROL_SetDeviceState(DS_Fault, SS_None);
