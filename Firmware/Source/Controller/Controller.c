@@ -22,8 +22,8 @@ typedef void (*FUNC_AsyncDelegate)();
 
 // Variables
 //
-volatile DeviceState CONTROL_State = DS_None;
-volatile DeviceSubState CONTROL_SubState = SS_None;
+volatile DeviceState CONTROL_State = DS_None, SavedState;
+volatile DeviceSubState CONTROL_SubState = SS_None, SavedSubState;
 static Boolean CycleActive = false;
 static Int16U CounterErrPress, CounterMaxErrPress;
 //
@@ -109,8 +109,8 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_CLR_HALT:
 			if(CONTROL_State == DS_Halt)
 			{
-				DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-				CONTROL_SetDeviceState(DS_ClampingRelease, SS_StartRelease);
+				CONTROL_State = SavedState;
+				CONTROL_SubState = SavedSubState;
 			}
 			break;
 
@@ -332,7 +332,8 @@ void CONTROL_UpdateWatchDog()
 //------------------------------------------
 void CONTROL_Halt()
 {
+	SavedState = CONTROL_State;
+	SavedSubState = CONTROL_SubState;
 	CONTROL_SetDeviceState(DS_Halt, SS_None);
 }
 // ----------------------------------------
-
