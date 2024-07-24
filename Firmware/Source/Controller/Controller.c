@@ -22,8 +22,8 @@ typedef void (*FUNC_AsyncDelegate)();
 
 // Variables
 //
-volatile DeviceState CONTROL_State = DS_None;
-volatile DeviceSubState CONTROL_SubState = SS_None;
+volatile DeviceState CONTROL_State = DS_None, SavedState;
+volatile DeviceSubState CONTROL_SubState = SS_None, SavedSubState;
 static Boolean CycleActive = false;
 static Int16U CounterErrPress, CounterMaxErrPress;
 //
@@ -107,12 +107,12 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_CLR_HALT:
-					if(CONTROL_State == DS_Halt)
-					{
-						DataTable[REG_OP_RESULT] = OPRESULT_NONE;
-						CONTROL_SetDeviceState(DS_ClampingRelease, SS_StartRelease);
-					}
-					break;
+			if(CONTROL_State == DS_Halt)
+			{
+				CONTROL_State = SavedState;
+				CONTROL_SubState = SavedSubState;
+			}
+			break;
 
 		case ACT_CLAMP:
 			if(CONTROL_State == DS_Ready)
@@ -152,17 +152,23 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_CHECK_ADPTS_STATUS:
+			DataTable[REG_TOP_ADPT_MISMATCHED] = (LOGIC_AdapterIDMatch(LL_MeasureIDTop()) == DataTable[REG_ID_ADPTR_SET]) ? 0 : 1;
+			DataTable[REG_BOT_ADPT_MISMATCHED] = (LOGIC_AdapterIDMatch(LL_MeasureIDBot()) == DataTable[REG_ID_ADPTR_SET]) ? 0 : 1;
+			break;
 
-			if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) != DataTable[REG_ID_ADPTR_SET])
-				DataTable[REG_TOP_ADPT_MISMATCHED] = 1;
+		case ACT_RELEASE_ADAPTER:
+			LL_HoldTopAdapter(false);
+			DELAY_US(PNEUMO_DELAY);
+			break;
+
+		case ACT_HOLD_ADAPTER:
+			if(CONTROL_State == DS_Ready)
+			{
+				LL_HoldTopAdapter(true);
+				DELAY_US(PNEUMO_DELAY);
+			}
 			else
-				DataTable[REG_TOP_ADPT_MISMATCHED] = 0;
-
-			if(LOGIC_AdapterIDMatch(LL_MeasureIDTop()) != DataTable[REG_ID_ADPTR_SET])
-				DataTable[REG_BOT_ADPT_MISMATCHED] = 1;
-			else
-				DataTable[REG_BOT_ADPT_MISMATCHED] = 0;
-
+				*pUserError = ERR_OPERATION_BLOCKED;
 			break;
 
 		default:
@@ -205,8 +211,8 @@ void CONTROL_ClampLogic()
 		{
 			case SS_BlockAdapters:
 				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-				LL_SetStatePneumTOP(true);
-				LL_SetStatePneumBOT(true);
+				LL_HoldTopAdapter(true);
+				LL_HoldBotAdapter(true);
 				CONTROL_SetDeviceState(DS_Clamping, SS_BlockDelay);
 				break;
 
@@ -214,8 +220,8 @@ void CONTROL_ClampLogic()
 				if(CONTROL_TimeCounter > Delay)
 				{
 					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-					LL_SetStateIndADPTR(true);
-					LL_SetStatePneumDUT(true);
+					LL_IndicateBlockAdapter(true);
+					LL_ClampDUT(true);
 					CONTROL_SetDeviceState(DS_Clamping, SS_ClampDelay);
 				}
 				break;
@@ -223,8 +229,8 @@ void CONTROL_ClampLogic()
 			case SS_ClampDelay:
 				if(CONTROL_TimeCounter > Delay)
 				{
-					LL_SetStateIndCSM(true);
-					LL_SetStateSFOutput(true);
+					LL_IndicateBlockCSM(true);
+					LL_SetSafetyOutput(true);
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;
 					CONTROL_SetDeviceState(DS_ClampingDone, SS_None);
 				}
@@ -232,9 +238,9 @@ void CONTROL_ClampLogic()
 
 			case SS_StartRelease:
 				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-				LL_SetStateSFOutput(false);
-				LL_SetStateIndCSM(false);
-				LL_SetStatePneumDUT(false);
+				LL_SetSafetyOutput(false);
+				LL_IndicateBlockCSM(false);
+				LL_ClampDUT(false);
 				CONTROL_SetDeviceState(DS_ClampingRelease, SS_ReleaseDelay);
 				break;
 
@@ -242,8 +248,7 @@ void CONTROL_ClampLogic()
 				if(CONTROL_TimeCounter > Delay)
 				{
 					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-					LL_SetStatePneumTOP(false);
-					LL_SetStatePneumBOT(false);
+					LL_HoldBotAdapter(false);
 					CONTROL_SetDeviceState(DS_ClampingRelease, SS_UnblockDelay);
 				}
 				break;
@@ -251,7 +256,7 @@ void CONTROL_ClampLogic()
 			case SS_UnblockDelay:
 				if(CONTROL_TimeCounter > Delay)
 				{
-					LL_SetStateIndADPTR(false);
+					LL_IndicateBlockAdapter(false);
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;
 					CONTROL_SetDeviceState(DS_Ready, SS_None);
 				}
@@ -294,14 +299,14 @@ void CONTROL_SamplePressureValue()
 
 void CONTROL_SwitchToFault(Int16U Reason)
 {
-	LL_SetStateSFOutput(false);
+	LL_SetSafetyOutput(false);
 
-	LL_SetStateIndADPTR(false);
-	LL_SetStateIndCSM(false);
+	LL_IndicateBlockAdapter(false);
+	LL_IndicateBlockCSM(false);
 
-	LL_SetStatePneumDUT(false);
-	LL_SetStatePneumTOP(false);
-	LL_SetStatePneumBOT(false);
+	LL_ClampDUT(false);
+	LL_HoldTopAdapter(false);
+	LL_HoldBotAdapter(false);
 
 	CONTROL_SetDeviceState(DS_Fault, SS_None);
 	DataTable[REG_FAULT_REASON] = Reason;
@@ -327,7 +332,8 @@ void CONTROL_UpdateWatchDog()
 //------------------------------------------
 void CONTROL_Halt()
 {
+	SavedState = CONTROL_State;
+	SavedSubState = CONTROL_SubState;
 	CONTROL_SetDeviceState(DS_Halt, SS_None);
 }
 // ----------------------------------------
-

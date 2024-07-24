@@ -9,13 +9,12 @@
 // Functions
 //
 void LL_ToggleBoardLED();
-void LL_SetStateIndCSM(bool State);
-void LL_SetStateIndADPTR(bool State);
-void LL_SetStatePneumTOP(bool State);
-void LL_SetStatePneumTOP(bool State);
-void LL_SetStatePneumBOT(bool State);
-void LL_SetStatePneumDUT(bool State);
-void LL_SetStateSFOutput(bool State);
+void LL_IndicateBlockCSM(bool State);
+void LL_IndicateBlockAdapter(bool State);
+void LL_HoldTopAdapter(bool State);
+void LL_HoldBotAdapter(bool State);
+void LL_ClampDUT(bool State);
+void LL_SetSafetyOutput(bool State);
 bool LL_GetStatePresenceSensorDUT1();
 bool LL_GetStatePresenceSensorDUT2();
 bool LL_GetStatePresenceSensorDUT3();

@@ -13,54 +13,54 @@
 // Send pulse to "CSM Block" indicator
 void DBACT_ToggleIndCSM()
 {
-	LL_SetStateIndCSM(true);
+	LL_IndicateBlockCSM(true);
 	DELAY_MS(1000);
-	LL_SetStateIndCSM(false);
+	LL_IndicateBlockCSM(false);
 }
 //-----------------------
 
 // Send pulse to "Adapter Block" indicator
 void DBACT_ToggleIndADPTR()
 {
-	LL_SetStateIndADPTR(true);
+	LL_IndicateBlockAdapter(true);
 	DELAY_MS(1000);
-	LL_SetStateIndADPTR(false);
+	LL_IndicateBlockAdapter(false);
 }
 //-----------------------
 
 // Send pulse to Top adapter blocking pneumatic cylinder
 void DBACT_TogglePneumTOP()
 {
-	LL_SetStatePneumTOP(true);
+	LL_HoldTopAdapter(true);
 	DELAY_MS(1000);
-	LL_SetStatePneumTOP(false);
+	LL_HoldTopAdapter(false);
 }
 //-----------------------
 
 // Send pulse to Bottom adapter blocking pneumatic cylinder
 void DBACT_TogglePneumBOT()
 {
-	LL_SetStatePneumBOT(true);
+	LL_HoldBotAdapter(true);
 	DELAY_MS(1000);
-	LL_SetStatePneumBOT(false);
+	LL_HoldBotAdapter(false);
 }
 //-----------------------
 
 // Send pulse to DUT blocking pneumatic cylinder
 void DBACT_TogglePneumDUT()
 {
-	LL_SetStatePneumDUT(true);
+	LL_ClampDUT(true);
 	DELAY_MS(1000);
-	LL_SetStatePneumDUT(false);
+	LL_ClampDUT(false);
 }
 //-----------------------
 
 // Send pulse to Safety Subsystem Output
 void DBACT_ToggleSFOutput()
 {
-	LL_SetStateSFOutput(true);
+	LL_SetSafetyOutput(true);
 	DELAY_MS(1000);
-	LL_SetStateSFOutput(false);
+	LL_SetSafetyOutput(false);
 }
 //-----------------------
 

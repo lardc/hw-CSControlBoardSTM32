@@ -22,6 +22,8 @@
 #define ACT_RELEASE						104	// Отсоединение зажимного устройства
 #define ACT_HALT						105	// Остановка процесса измерения
 #define ACT_SET_TEMPERATURE				108 // Задание температуры (Совместимость)
+#define ACT_RELEASE_ADAPTER				109	// Освободить верхний адаптер
+#define ACT_HOLD_ADAPTER				110	// Зафиксировать верхний адаптер
 #define ACT_CHECK_ADPTS_STATUS 			111 // Проверка статуса адаптеров
 
 #define ACT_SAVE_TO_ROM					200	// Сохранение пользовательских данных во FLASH процессора
