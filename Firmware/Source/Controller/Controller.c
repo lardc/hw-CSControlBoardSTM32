@@ -108,10 +108,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 
 		case ACT_CLR_HALT:
 			if(CONTROL_State == DS_Halt)
-			{
-				CONTROL_State = SavedState;
-				CONTROL_SubState = SavedSubState;
-			}
+				CONTROL_SetDeviceState(SavedState, SavedSubState);
 			break;
 
 		case ACT_CLAMP:
