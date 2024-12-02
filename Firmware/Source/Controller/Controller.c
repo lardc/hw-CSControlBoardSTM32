@@ -154,6 +154,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 			break;
 
 		case ACT_RELEASE_ADAPTER:
+			LL_IndicateBlockAdapter(false);
 			LL_HoldTopAdapter(false);
 			DELAY_US(PNEUMO_DELAY);
 			break;
@@ -161,6 +162,7 @@ static Boolean CONTROL_DispatchAction(Int16U ActionID, pInt16U pUserError)
 		case ACT_HOLD_ADAPTER:
 			if(CONTROL_State == DS_Ready)
 			{
+				LL_IndicateBlockAdapter(true);
 				LL_HoldTopAdapter(true);
 				DELAY_US(PNEUMO_DELAY);
 			}
@@ -208,6 +210,8 @@ void CONTROL_ClampLogic()
 		{
 			case SS_BlockAdapters:
 				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
+				LL_IndicateBlockCSM(true);
+				LL_IndicateBlockAdapter(true);
 				LL_HoldTopAdapter(true);
 				LL_HoldBotAdapter(true);
 				CONTROL_SetDeviceState(DS_Clamping, SS_BlockDelay);
@@ -217,7 +221,6 @@ void CONTROL_ClampLogic()
 				if(CONTROL_TimeCounter > Delay)
 				{
 					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
-					LL_IndicateBlockAdapter(true);
 					LL_ClampDUT(true);
 					CONTROL_SetDeviceState(DS_Clamping, SS_ClampDelay);
 				}
@@ -226,7 +229,6 @@ void CONTROL_ClampLogic()
 			case SS_ClampDelay:
 				if(CONTROL_TimeCounter > Delay)
 				{
-					LL_IndicateBlockCSM(true);
 					LL_SetSafetyOutput(true);
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;
 					CONTROL_SetDeviceState(DS_ClampingDone, SS_None);
@@ -236,7 +238,6 @@ void CONTROL_ClampLogic()
 			case SS_StartRelease:
 				Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
 				LL_SetSafetyOutput(false);
-				LL_IndicateBlockCSM(false);
 				LL_ClampDUT(false);
 				CONTROL_SetDeviceState(DS_ClampingRelease, SS_ReleaseDelay);
 				break;
@@ -246,6 +247,7 @@ void CONTROL_ClampLogic()
 				{
 					Delay = CONTROL_TimeCounter + PNEUMO_DELAY;
 					LL_HoldBotAdapter(false);
+					LL_IndicateBlockCSM(false);
 					CONTROL_SetDeviceState(DS_ClampingRelease, SS_UnblockDelay);
 				}
 				break;
@@ -253,7 +255,6 @@ void CONTROL_ClampLogic()
 			case SS_UnblockDelay:
 				if(CONTROL_TimeCounter > Delay)
 				{
-					LL_IndicateBlockAdapter(false);
 					DataTable[REG_OP_RESULT] = OPRESULT_OK;
 					CONTROL_SetDeviceState(DS_Ready, SS_None);
 				}
