@@ -63,7 +63,7 @@
 
 #define LABEL_ABS_ERR_MIN			1
 #define LABEL_ABS_ERR_MAX			1000
-#define LABEL_ABS_ERR_DEF			20
+#define LABEL_ABS_ERR_DEF			50
 
 #define LABEL_REL_ERR_MIN			0.001f
 #define LABEL_REL_ERR_MAX			1.0f
