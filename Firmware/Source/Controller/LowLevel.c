@@ -5,9 +5,12 @@
 #include "Delay.h"
 #include "Global.h"
 #include "DataTable.h"
+#include "Constraints.h"
+
+// Forward functions
+float LL_MeasureWrapper(ADC_TypeDef* ADCx, uint32_t ChannelNumber);
 
 // Functions
-//
 void LL_ToggleBoardLED()
 {
 	GPIO_Toggle(GPIO_LED);
@@ -88,18 +91,30 @@ bool LL_GetStateLimitSwitchBotAdapter()
 
 float LL_MeasureIDTop()
 {
-	return (float)ADC_Measure(ADC1, ADC_ID_TOP_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
+	return LL_MeasureWrapper(ADC1, ADC_ID_TOP_CHANNEL);
 }
 //-----------------------------
 
 float LL_MeasureIDBot()
 {
-	return (float)ADC_Measure(ADC1, ADC_ID_BOT_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
+	return LL_MeasureWrapper(ADC1, ADC_ID_BOT_CHANNEL);
 }
 //-----------------------------
 
 float LL_MeasurePressure()
 {
-	return (float)ADC_Measure(ADC2, ADC_PRESSURE_CHANNEL) * ADC_REF_VOLTAGE / ADC_RESOLUTION;
+	return LL_MeasureWrapper(ADC2, ADC_PRESSURE_CHANNEL);
+}
+//-----------------------------
+
+float LL_MeasureWrapper(ADC_TypeDef* ADCx, uint32_t ChannelNumber)
+{
+	float Result = 0;
+	float Samples = DataTable[REG_SAMPLING_AVG] ? DataTable[REG_SAMPLING_AVG] : AVG_SAMPLES_DEF;
+
+	for(int i = 0; i < Samples; i++)
+		Result += ADC_Measure(ADCx, ChannelNumber);
+
+	return Result / Samples * ADC_REF_VOLTAGE / ADC_RESOLUTION;
 }
 //-----------------------------

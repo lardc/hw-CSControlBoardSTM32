@@ -46,8 +46,11 @@ DUTType LOGIC_AdapterIDMatch(float IDVoltage)
 
 bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg)
 {
-	return(fabsf(IDVoltage - DataTable[ReferenceReg])) < VOLTAGE_ID_ABSOLUTE_MAX_ERR ||
-			(fabsf(IDVoltage - DataTable[ReferenceReg]) / DataTable[ReferenceReg]) < VOLTAGE_ID_RELATIVE_MAX_ERR;
+	float AbsError = DataTable[REG_LABEL_ABS_ERROR] ? DataTable[REG_LABEL_ABS_ERROR] : LABEL_ABS_ERR_DEF;
+	float RelError = DataTable[REG_LABEL_REL_ERROR] ? DataTable[REG_LABEL_REL_ERROR] : LABEL_REL_ERR_DEF;
+
+	return(fabsf(IDVoltage - DataTable[ReferenceReg])) < AbsError ||
+			(fabsf(IDVoltage - DataTable[ReferenceReg]) / DataTable[ReferenceReg]) < RelError;
 }
 //------------------------------------------
 

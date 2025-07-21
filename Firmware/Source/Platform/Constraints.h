@@ -57,6 +57,18 @@
 #define TOP_ADAPTER					0
 #define BOT_ADAPTER					1
 
+#define AVG_SAMPLES_MIN				1
+#define AVG_SAMPLES_MAX				1000
+#define AVG_SAMPLES_DEF				100
+
+#define LABEL_ABS_ERR_MIN			1
+#define LABEL_ABS_ERR_MAX			1000
+#define LABEL_ABS_ERR_DEF			20
+
+#define LABEL_REL_ERR_MIN			0.001f
+#define LABEL_REL_ERR_MAX			1.0f
+#define LABEL_REL_ERR_DEF			0.15f
+
 // Types
 typedef struct __TableItemConstraint
 {
