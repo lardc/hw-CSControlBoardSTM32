@@ -13,7 +13,6 @@
 #include "Logic.h"
 #include "BCCIxParams.h"
 #include "Constraints.h"
-#include "Measurement.h"
 #include "math.h"
 
 // Types
@@ -275,7 +274,7 @@ void CONTROL_SamplePressureValue()
 	{
 		NextSampleTime = PRESSURE_SAMPLE_PERIOD + CONTROL_TimeCounter;
 
-		float Pressure = MEASURE_GetPressureValue();
+		float Pressure = LL_MeasurePressure();
 		DataTable[REG_PRESSURE_VALUE] = Pressure;
 		CounterMaxErrPress = DataTable[REG_COUNTER_MAX_ERR_PRESS];
 

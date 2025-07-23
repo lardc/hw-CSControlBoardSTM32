@@ -103,7 +103,21 @@ float LL_MeasureIDBot()
 
 float LL_MeasurePressure()
 {
-	return LL_MeasureWrapper(ADC2, ADC_PRESSURE_CHANNEL);
+	float Offset = DataTable[REG_PRESSURE_OFFSET];
+	float K = DataTable[REG_PRESSURE_K];
+
+	// Такая формула для оффсета сделана для совместимости с уже записанными в DT значениями и по сути
+	// не является корректной
+	float Pressure = LL_MeasureWrapper(ADC2, ADC_PRESSURE_CHANNEL) * K - Offset * ADC_REF_VOLTAGE / ADC_RESOLUTION * K;
+	Pressure = (Pressure > 0) ? Pressure : 0;
+
+	// Тонкая подстройка измерения напряжения
+	float P2 = DataTable[REG_PRESSURE_P2];
+	float P1 = DataTable[REG_PRESSURE_P1];
+	float P0 = DataTable[REG_PRESSURE_P0];
+	Pressure = Pressure * Pressure * P2 + Pressure * P1 + P0;
+
+	return (Pressure > 0) ? Pressure : 0;
 }
 //-----------------------------
 
