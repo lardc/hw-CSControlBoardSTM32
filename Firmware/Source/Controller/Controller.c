@@ -13,7 +13,6 @@
 #include "Logic.h"
 #include "BCCIxParams.h"
 #include "Constraints.h"
-#include "math.h"
 
 // Types
 //
@@ -24,7 +23,6 @@ typedef void (*FUNC_AsyncDelegate)();
 volatile DeviceState CONTROL_State = DS_None, SavedState;
 volatile DeviceSubState CONTROL_SubState = SS_None, SavedSubState;
 static Boolean CycleActive = false;
-static Int16U CounterErrPress, CounterMaxErrPress;
 //
 volatile Int64U CONTROL_TimeCounter = 0;
 
@@ -269,6 +267,7 @@ void CONTROL_ClampLogic()
 void CONTROL_SamplePressureValue()
 {
 	static Int64U NextSampleTime = 0;
+	static Int16U CounterErrPress = 0;
 
 	if(CONTROL_TimeCounter > NextSampleTime)
 	{
@@ -276,18 +275,16 @@ void CONTROL_SamplePressureValue()
 
 		float Pressure = LL_MeasurePressure();
 		DataTable[REG_PRESSURE_VALUE] = Pressure;
-		CounterMaxErrPress = DataTable[REG_COUNTER_MAX_ERR_PRESS];
 
 		if(CONTROL_State == DS_Ready || CONTROL_State == DS_Clamping ||
 				CONTROL_State == DS_ClampingDone || CONTROL_State == DS_ClampingRelease)
 		{
-			float PressureError = fabsf(Pressure - DataTable[REG_SET_PRESSURE_VALUE]) / DataTable[REG_SET_PRESSURE_VALUE];
-			if(PressureError > PRESSURE_MAX_ERR)
+			if(Pressure < DataTable[REG_SET_PRESSURE_VALUE])
 				CounterErrPress++;
 			else
 				CounterErrPress = 0;
 
-			if(CounterErrPress > CounterMaxErrPress)
+			if(CounterErrPress > DataTable[REG_COUNTER_MAX_ERR_PRESS])
 				CONTROL_SwitchToFault(DF_PRESSURE_ERROR_EXCEED);
 		}
 	}

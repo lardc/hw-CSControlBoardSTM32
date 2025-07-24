@@ -44,8 +44,8 @@
 #define PRESSURE_P0_MAX				10
 #define PRESSURE_P0_DEF				0
 
-#define SET_PRESSURE_VALUE_MIN		4		// в Бар
-#define SET_PRESSURE_VALUE_MAX		6		// в Бар
+#define SET_PRESSURE_VALUE_MIN		1		// в Бар
+#define SET_PRESSURE_VALUE_MAX		8		// в Бар
 #define SET_PRESSURE_VALUE_DEF		5		// в Бар
 
 #define PRESS_COUNTER_MAX			10
