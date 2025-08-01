@@ -23,8 +23,8 @@ const TableItemConstraint Constraint[DATA_TABLE_WP_START] = {
 		{SET_PRESSURE_VALUE_MIN, SET_PRESSURE_VALUE_MAX, SET_PRESSURE_VALUE_DEF},	// 11
 		{0, PRESS_COUNTER_MAX, PRESS_COUNTER_DEF},									// 12
 		{AVG_SAMPLES_MIN, AVG_SAMPLES_MAX, AVG_SAMPLES_DEF},						// 13
-		{0, 0, 0},																	// 14
-		{0, 0, 0},																	// 15
+		{LABEL_ABS_ERR_MIN, LABEL_ABS_ERR_MAX, LABEL_ABS_ERR_DEF},					// 14
+		{LABEL_REL_ERR_MIN, LABEL_REL_ERR_MAX, LABEL_REL_ERR_DEF},					// 15
 		{0, 0, 0},																	// 16
 		{0, 0, 0},																	// 17
 		{0, 0, 0},																	// 18
