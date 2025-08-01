@@ -47,10 +47,9 @@ DUTType LOGIC_AdapterIDMatch(float IDVoltage)
 bool LOGIC_IDVoltageInRane(float IDVoltage, Int16U ReferenceReg)
 {
 	float AbsError = DataTable[REG_LABEL_ABS_ERROR] ? DataTable[REG_LABEL_ABS_ERROR] : LABEL_ABS_ERR_DEF;
-	float RelError = DataTable[REG_LABEL_REL_ERROR] ? DataTable[REG_LABEL_REL_ERROR] : LABEL_REL_ERR_DEF;
 
-	return(fabsf(IDVoltage - DataTable[ReferenceReg])) < AbsError ||
-			(fabsf(IDVoltage - DataTable[ReferenceReg]) / DataTable[ReferenceReg]) < RelError;
+	// Проверка только на абсолютное значение
+	return fabsf(IDVoltage - DataTable[ReferenceReg]) < AbsError;
 }
 //------------------------------------------
 
